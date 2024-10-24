@@ -15,7 +15,6 @@
 			<p>Bloq.it</p>
 		</div>
 
-		<!-- Menu Items (Desktop) -->
 		<div class="hidden md:flex space-x-8 bg-card text-card-foreground">
 			<a
 				href="/"
@@ -33,7 +32,6 @@
 			</form>
 		</div>
 
-		<!-- Hamburger Icon (Mobile) -->
 		<button
 			class="md:hidden focus:outline-none focus:ring-2 focus:ring-gray-600"
 			on:click={toggleMenu}
@@ -55,7 +53,6 @@
 		</button>
 	</div>
 
-	<!-- Mobile Menu -->
 	<div class={`md:hidden ${isOpen ? 'block' : 'hidden'}  text-foreground`}>
 		<a
 			href="/"
