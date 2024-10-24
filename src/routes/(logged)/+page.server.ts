@@ -1,6 +1,8 @@
 import * as auth from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from '../login/$types';
+
+
 export const actions: Actions = {
 	logout: async (event) => {
 		if (!event.locals.session) {
@@ -12,3 +14,5 @@ export const actions: Actions = {
 		return redirect(302, '/login');
 	}
 };
+
+

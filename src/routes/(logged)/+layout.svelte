@@ -1,8 +1,6 @@
-<script lang="ts">
-	import { enhance } from '$app/forms';
+<script>
+	import Navbar from '$lib/components/ui/navBar/navbar.svelte';
 </script>
 
+<Navbar />
 <slot></slot>
-<form method="post" action="?/logout" use:enhance>
-	<button>Sign out</button>
-</form>
