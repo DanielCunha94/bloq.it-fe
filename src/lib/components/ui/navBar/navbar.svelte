@@ -19,7 +19,7 @@
 			<a
 				href="/"
 				class={`transition duration-300 hover:text-primary ${$page.url.pathname == '/' ? 'text-primary' : ''}`}
-				>Pokémon</a
+				>Pokémons</a
 			>
 			<a
 				href="/pokedex"
