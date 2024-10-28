@@ -10,7 +10,7 @@
 <Pagination.Root count={totalCount} {perPage} bind:page let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
-			<Pagination.PrevButton />
+			<Pagination.PrevButton disabled={loading || currentPage == 1} />
 		</Pagination.Item>
 		{#each pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
@@ -26,7 +26,9 @@
 			{/if}
 		{/each}
 		<Pagination.Item>
-			<Pagination.NextButton />
+			<Pagination.NextButton
+				disabled={loading || currentPage === Math.ceil(totalCount / perPage)}
+			/>
 		</Pagination.Item>
 	</Pagination.Content>
 </Pagination.Root>
