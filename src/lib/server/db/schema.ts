@@ -29,23 +29,12 @@ export const capturedPokemon = sqliteTable('captured_pokemon', {
 	specialAttack: integer('special_attack'),
 	specialDefense: integer('special_defense'),
 	imgUrl: text('img_url'),
-	firstAdded: integer('first_added', { mode: 'timestamp' }).notNull()
+	createdAt: integer('first_added', { mode: 'timestamp' }).notNull(),
+	note: text('note')
 });
 
 export type Session = typeof session.$inferSelect;
 
 export type User = typeof user.$inferSelect;
 
-export type Pokemon = {
-	name: string;
-	height: number;
-	weight: number;
-	health: number | null;
-	speed: number | null;
-	attack: number | null;
-	defense: number | null;
-	specialAttack: number | null;
-	specialDefense: number | null;
-	imgUrl: string | null;
-	firstAdded: number;
-};
+

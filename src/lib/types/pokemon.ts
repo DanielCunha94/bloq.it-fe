@@ -1,6 +1,7 @@
 import { type Pokemon as ExternalPokemon } from 'pokeapi-js-wrapper';
 
 export type Pokemon = {
+	id: string;
 	name: string;
 	height: number;
 	weight: number;
@@ -30,6 +31,7 @@ function isValidStat(stat: string): stat is Stat {
 
 export function externalPokemonToPokemon(externalPokemon: ExternalPokemon): Pokemon {
 	const pokemon: Pokemon = {
+		id: externalPokemon.id.toString(),
 		name: externalPokemon.name,
 		height: externalPokemon.height,
 		weight: externalPokemon.weight,
