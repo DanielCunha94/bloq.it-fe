@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { browser, dev } from '$app/environment';
 	import Navbar from '$lib/components/ui/navBar/navbar.svelte';
 

@@ -14,6 +14,38 @@ export const session = sqliteTable('session', {
 	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull()
 });
 
+export const capturedPokemon = sqliteTable('captured_pokemon', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id),
+	name: text('name').notNull(),
+	height: integer('height').notNull(),
+	weight: integer('weight').notNull(),
+	health: integer('health'),
+	speed: integer('speed'),
+	attack: integer('attack'),
+	defense: integer('defense'),
+	specialAttack: integer('special_attack'),
+	specialDefense: integer('special_defense'),
+	imgUrl: text('img_url'),
+	firstAdded: integer('first_added', { mode: 'timestamp' }).notNull()
+});
+
 export type Session = typeof session.$inferSelect;
 
 export type User = typeof user.$inferSelect;
+
+export type Pokemon = {
+	name: string;
+	height: number;
+	weight: number;
+	health: number | null;
+	speed: number | null;
+	attack: number | null;
+	defense: number | null;
+	specialAttack: number | null;
+	specialDefense: number | null;
+	imgUrl: string | null;
+	firstAdded: number;
+};
