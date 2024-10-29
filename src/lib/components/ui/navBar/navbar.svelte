@@ -12,7 +12,7 @@
 <nav class="bg-card text-foreground">
 	<div class="container mx-auto px-4 py-4 flex justify-between items-center">
 		<div class="text-2xl font-semibold">
-			<p>Bloq.it</p>
+			<p>PokeBloq.it</p>
 		</div>
 
 		<div class="hidden md:flex space-x-8 bg-card text-card-foreground">

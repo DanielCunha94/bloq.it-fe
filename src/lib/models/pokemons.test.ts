@@ -21,7 +21,8 @@ describe('externalPokemonToPokemon', () => {
 				{ base_stat: 65, stat: { name: 'special-attack' } },
 				{ base_stat: 65, stat: { name: 'special-defense' } },
 				{ base_stat: 45, stat: { name: 'speed' } }
-			]
+			],
+			types: [{ type: { name: 'grass' } }]
 		} as ExternalPokemon;
 
 		const expectedPokemon: Pokemon = {
@@ -35,7 +36,8 @@ describe('externalPokemonToPokemon', () => {
 			defense: 49,
 			specialAttack: 65,
 			specialDefense: 65,
-			imgUrl: 'url'
+			imgUrl: 'url',
+			types: ['grass']
 		};
 
 		const convertedPokemon = externalPokemonToPokemon(externalPokemon);
@@ -57,7 +59,8 @@ describe('setCapturedPokemons', () => {
 				defense: 49,
 				specialAttack: 65,
 				specialDefense: 65,
-				imgUrl: null
+				imgUrl: null,
+				types: ['grass']
 			},
 			{
 				id: '2',
@@ -70,7 +73,8 @@ describe('setCapturedPokemons', () => {
 				defense: 63,
 				specialAttack: 80,
 				specialDefense: 80,
-				imgUrl: null
+				imgUrl: null,
+				types: ['grass', 'poison']
 			},
 			{
 				id: '3',
@@ -83,7 +87,8 @@ describe('setCapturedPokemons', () => {
 				defense: 83,
 				specialAttack: 100,
 				specialDefense: 100,
-				imgUrl: null
+				imgUrl: null,
+				types: ['grass', 'poison']
 			}
 		];
 
@@ -101,7 +106,8 @@ describe('setCapturedPokemons', () => {
 				specialDefense: 65,
 				imgUrl: null,
 				createdAt: new Date(),
-				note: 'First capture!'
+				note: 'First capture!',
+				types: ['grass']
 			}
 		];
 

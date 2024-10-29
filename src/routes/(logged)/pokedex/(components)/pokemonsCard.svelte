@@ -11,10 +11,10 @@
 	import type { FormTextareaEvent } from '$lib/components/ui/textarea';
 
 	export let pokemon: CapturedPokemon;
+	
+	let note: string;
 
 	const dispatch = createEventDispatcher<{ addNote: { note: string } }>();
-
-	let note: string;
 
 	function handleShare() {
 		const text = `${pokemon.name} (HP: ${pokemon.health}, Height: ${pokemon.height}, Weight: ${pokemon.weight})`;

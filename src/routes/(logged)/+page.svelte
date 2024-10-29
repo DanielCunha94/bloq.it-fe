@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { getPokemonsList } from '$lib/services/pokemon';
-	import type { Pokemon } from '$lib/models/pokemon';
-	import Pagination from '../../lib/components/pagination.svelte';
-	import PokemonsTable from '../../lib/components/pokemonsTable.svelte';
+	import { setCapturedPokemons, type Pokemon } from '$lib/models/pokemon';
+	import Pagination from '$lib/components/pagination.svelte';
+	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import Pokemoncard from './(components)/pokemonCard.svelte';
 	import type { PageData } from './$types';
 	import { addPokemonToPokedex } from '$lib/services/pokedex';
 	import { toast } from 'svelte-sonner';
+	import { myPokemons } from '$lib/stores/pokedex';
+	import type { CapturedPokemon } from '$lib/models/pokedex';
 
 	export let data: PageData;
 
@@ -22,16 +24,29 @@
 	async function loadPokemons(page: number) {
 		loading = true;
 		({ pokemons, totalCount } = await getPokemonsList(perPage * (page - 1), perPage));
+		setCapturedPokemons(pokemons, $myPokemons);
+		pokemons = pokemons;
 		loading = false;
 	}
 
 	async function handleAddToPokedex(pokemon: Pokemon) {
 		const res = await addPokemonToPokedex(data.user.id, pokemon);
+
 		if (res.hasError) {
 			toast.error('Fail to add to pokedex');
 			return;
 		}
+
 		toast.success(`${pokemon.name} add to pokedex`);
+
+		const newCapturedPokemon: CapturedPokemon = {
+			...pokemon,
+			note: null,
+			createdAt: new Date().toISOString()
+		};
+		$myPokemons = [...$myPokemons, newCapturedPokemon];
+		setCapturedPokemons(pokemons, $myPokemons);
+		pokemons = pokemons;
 	}
 </script>
 
@@ -44,7 +59,7 @@
 	</div>
 
 	<Tabs.Content value="table">
-		<div class="mx-4 lg:mx-20 mt-5">
+		<div class="mx-4 md:mx-20 mt-5">
 			<PokemonsTable {pokemons} />
 		</div>
 	</Tabs.Content>

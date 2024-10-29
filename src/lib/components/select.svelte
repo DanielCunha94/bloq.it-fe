@@ -12,27 +12,29 @@
 	const dispatch = createEventDispatcher<{ select: Option }>();
 </script>
 
-<Label for={title}>{title}</Label>
-<Select.Root
-	selected={options[0]}
-	onSelectedChange={(v) => {
-		if (v) {
-			dispatch('select', v);
-		}
-	}}
->
-	<Select.Trigger class="w-[180px]">
-		<Select.Value {placeholder} />
-	</Select.Trigger>
-	<Select.Content>
-		<Select.Group>
-			<Select.Label>{title}</Select.Label>
-			{#each options as option}
-				<Select.Item value={option.value} label={option.label ?? option.value}>
-					{option.label ?? option.value}
-				</Select.Item>
-			{/each}
-		</Select.Group>
-	</Select.Content>
-	<Select.Input name={title} />
-</Select.Root>
+<div>
+	<Label for={title}>{title}</Label>
+	<Select.Root
+		selected={options[0]}
+		onSelectedChange={(v) => {
+			if (v) {
+				dispatch('select', v);
+			}
+		}}
+	>
+		<Select.Trigger class="w-[180px]">
+			<Select.Value {placeholder} />
+		</Select.Trigger>
+		<Select.Content>
+			<Select.Group>
+				<Select.Label>{title}</Select.Label>
+				{#each options as option}
+					<Select.Item value={option.value} label={option.label ?? option.value}>
+						{option.label ?? option.value}
+					</Select.Item>
+				{/each}
+			</Select.Group>
+		</Select.Content>
+		<Select.Input name={title} />
+	</Select.Root>
+</div>

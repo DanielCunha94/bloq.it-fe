@@ -3,6 +3,7 @@
 	import type { CapturedPokemon } from '$lib/models/pokedex';
 	import type { Pokemon } from '$lib/models/pokemon';
 	import { formatDate } from '$lib/utils/time';
+	import Badge from './ui/badge/badge.svelte';
 	import { Progress } from './ui/progress';
 
 	export let pokemon: Pokemon | CapturedPokemon;
@@ -38,6 +39,14 @@
 		<p class="text-lg font-semibold">{`Height: ${pokemon.height}`}</p>
 		<p class="text-lg font-semibold">{`Weight: ${pokemon.weight}`}</p>
 	</div>
+
+	{#if pokemon.types}
+		<div class="flex justify-center gap-1 space-y-1 items-baseline">
+			{#each pokemon.types as type}
+				<Badge class="bg-yellow-300" ariant="secondary">{type}</Badge>
+			{/each}
+		</div>
+	{/if}
 
 	{#each stats as stat}
 		<div class="flex justify-between space-y-1 items-center">

@@ -30,11 +30,10 @@ export const capturedPokemon = sqliteTable('captured_pokemon', {
 	specialDefense: integer('special_defense'),
 	imgUrl: text('img_url'),
 	createdAt: integer('first_added', { mode: 'timestamp' }).notNull(),
-	note: text('note')
+	note: text('note'),
+	types: text('types')
 });
 
 export type Session = typeof session.$inferSelect;
 
 export type User = typeof user.$inferSelect;
-
-

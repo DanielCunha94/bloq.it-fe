@@ -22,7 +22,8 @@ export const POST: RequestHandler<Params> = async ({ params, request }) => {
 		defense,
 		specialAttack,
 		specialDefense,
-		imgUrl
+		imgUrl,
+		types
 	} = (await request.json()) as Pokemon;
 
 	if (!userId || !name || !height || !weight) {
@@ -44,7 +45,8 @@ export const POST: RequestHandler<Params> = async ({ params, request }) => {
 			specialDefense,
 			imgUrl,
 			createdAt: new Date(),
-			note: undefined
+			note: undefined,
+			types: JSON.stringify(types)
 		});
 
 		return json({ status: 201 });
@@ -62,10 +64,16 @@ export const GET: RequestHandler<Params> = async ({ params }) => {
 	}
 
 	try {
-		const pokemons: CapturedPokemon[] = await db
-			.select()
-			.from(capturedPokemon)
-			.where(eq(capturedPokemon.userId, userId));
+		const pokemons: CapturedPokemon[] = (
+			await db.select().from(capturedPokemon).where(eq(capturedPokemon.userId, userId))
+		).map((p) => {
+			let types: string[] = [];
+			if (p.types) {
+				types = JSON.parse(p.types);
+			}
+			const capturedPokemon: CapturedPokemon = { ...p, types };
+			return capturedPokemon;
+		});
 
 		return json(pokemons);
 	} catch (error) {
