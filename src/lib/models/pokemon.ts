@@ -1,4 +1,5 @@
 import { type Pokemon as ExternalPokemon } from 'pokeapi-js-wrapper';
+import type { CapturedPokemon } from './pokedex';
 
 export type Pokemon = {
 	id: string;
@@ -12,6 +13,7 @@ export type Pokemon = {
 	specialAttack: number | null;
 	specialDefense: number | null;
 	imgUrl: string | null;
+	captured?: boolean;
 };
 
 const stats = {
@@ -53,5 +55,13 @@ function mapStats(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
 		if (isValidStat(statName) && stats[statName]) {
 			pokemon[stats[statName]] = stat.base_stat;
 		}
+	});
+}
+
+export function setCapturedPokemons(pokemons: Pokemon[], capturedPokemons: CapturedPokemon[]) {
+	const capturedIds = new Set(capturedPokemons.map((captured) => captured.id));
+
+	pokemons.forEach((pokemon) => {
+		pokemon.captured = capturedIds.has(pokemon.id) || false;
 	});
 }

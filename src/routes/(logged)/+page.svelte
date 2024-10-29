@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { getPokemonsList } from '$lib/services/pokemon';
-	import type { Pokemon } from '$lib/types/pokemon';
+	import type { Pokemon } from '$lib/models/pokemon';
 	import Pagination from './(components)/pagination.svelte';
 	import PokemonsTable from './(components)/pokemonsTable.svelte';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import Pokemoncard from './(components)/pokemonCard.svelte';
 	import type { PageData } from './$types';
 	import { addPokemonToPokedex } from '$lib/services/pokedex';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
-
-	$: console.log(data);
 
 	let pokemons: Pokemon[] = [];
 	let loading = false;
@@ -28,6 +27,11 @@
 
 	async function handleAddToPokedex(pokemon: Pokemon) {
 		const res = await addPokemonToPokedex(data.user.id, pokemon);
+		if (res.hasError) {
+			toast.error('Fail to add to pokedex');
+			return;
+		}
+		toast.success(`${pokemon.name} add to pokedex`);
 	}
 </script>
 

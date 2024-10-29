@@ -1,7 +1,7 @@
-import type { Pokemon } from '$lib/types/pokemon';
+import type { Pokemon } from '$lib/models/pokemon';
 import HttpClient from '$lib/utils/http';
 import { PUBLIC_BASE_URL } from '$env/static/public';
-import type { CapturedPokemon } from '$lib/types/pokedex';
+import type { CapturedPokemon } from '$lib/models/pokedex';
 
 const api = new HttpClient(PUBLIC_BASE_URL);
 
@@ -11,4 +11,10 @@ export async function addPokemonToPokedex(userId: string, pokemon: Pokemon) {
 
 export async function getPokemonsFromPokedex(userId: string) {
 	return api.get<CapturedPokemon[]>(`/api/v1/pokedex/${userId}`);
+}
+
+export async function addNoteToPokemon(userId: string, pokemonId: string, note: string) {
+	return api.patch<{ note: string }, unknown>(`/api/v1/pokedex/${userId}/pokemon/${pokemonId}`, {
+		note
+	});
 }
