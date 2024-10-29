@@ -9,10 +9,24 @@
 	import { downloadCSV } from '$lib/utils/csv';
 	import Dowload from 'svelte-radix/Download.svelte';
 	import { myPokemons } from '$lib/stores/pokedex';
+	import Pagination from '$lib/components/pagination.svelte';
+	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
+	import { toast } from 'svelte-sonner';
+	import Select from '$lib/components/select.svelte';
 
 	export let data: PageData;
 
 	let pokemons: CapturedPokemon[] = [];
+	let perPage = 10;
+	let page: number = 1;
+	let loading = false;
+
+	const filterAndSortOptions = [
+		{ value: 'name', label: 'Name' },
+		{ value: 'height', label: 'Height' },
+		{ value: 'type', label: 'Type' },
+		{ value: 'createdAt', label: 'CreatedAt' }
+	];
 
 	$: pokemons = $myPokemons;
 
@@ -22,6 +36,11 @@
 
 	async function handleAddNote(note: string, pokemon: CapturedPokemon) {
 		const res = await addNoteToPokemon(data.user.id, pokemon.id, note);
+		if (res.hasError) {
+			toast.error('Fail to add note');
+			return;
+		}
+		toast.success(`Note added to ${pokemon.name}`);
 	}
 </script>
 
@@ -37,6 +56,17 @@
 	</Button>
 </div>
 
+{#if filterAndSortOptions}
+	<Select
+		title={'Sort by'}
+		placeholder={'Sort by'}
+		options={filterAndSortOptions}
+		on:select={(e) => {
+			console.log(e.detail);
+		}}
+	/>
+{/if}
+
 <Tabs.Root value="table">
 	<div class="flex justify-center">
 		<Tabs.List class="mt-3   flex justify-center">
@@ -44,7 +74,11 @@
 			<Tabs.Trigger value="card">Cards View</Tabs.Trigger>
 		</Tabs.List>
 	</div>
-	<Tabs.Content value="table"></Tabs.Content>
+	<Tabs.Content value="table">
+		<div class="mx-4 lg:mx-20 mt-5">
+			<PokemonsTable {pokemons} />
+		</div>
+	</Tabs.Content>
 	<Tabs.Content value="card">
 		<div class="flex flex-wrap gap-4 justify-center">
 			{#each pokemons as pokemon, i (i)}
@@ -58,3 +92,4 @@
 		</div>
 	</Tabs.Content>
 </Tabs.Root>
+<Pagination bind:page {perPage} totalCount={pokemons.length} {loading} />

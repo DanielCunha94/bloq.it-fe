@@ -1,8 +1,9 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index.js';
+	import type { CapturedPokemon } from '$lib/models/pokedex';
 	import type { Pokemon } from '$lib/models/pokemon';
 
-	export let pokemons: Pokemon[] = [];
+	export let pokemons: Pokemon[] | CapturedPokemon[] = [];
 </script>
 
 <Table.Root>

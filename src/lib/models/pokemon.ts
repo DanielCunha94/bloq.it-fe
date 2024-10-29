@@ -13,6 +13,7 @@ export type Pokemon = {
 	specialAttack: number | null;
 	specialDefense: number | null;
 	imgUrl: string | null;
+	types: string[];
 	captured?: boolean;
 };
 
@@ -43,9 +44,11 @@ export function externalPokemonToPokemon(externalPokemon: ExternalPokemon): Poke
 		defense: null,
 		specialAttack: null,
 		specialDefense: null,
-		imgUrl: externalPokemon.sprites.front_default
+		imgUrl: externalPokemon.sprites.front_default,
+		types: []
 	};
 	mapStats(externalPokemon, pokemon);
+	mapTypes(externalPokemon, pokemon);
 	return pokemon;
 }
 
@@ -56,6 +59,14 @@ function mapStats(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
 			pokemon[stats[statName]] = stat.base_stat;
 		}
 	});
+}
+
+function mapTypes(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
+	const types: string[] = [];
+	externalPokemon.types.forEach((type) => {
+		types.push(type.type.name);
+	});
+	pokemon.types = types;
 }
 
 export function setCapturedPokemons(pokemons: Pokemon[], capturedPokemons: CapturedPokemon[]) {

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
 	import type { Pokemon } from '$lib/models/pokemon';
-	import { Progress } from '$lib/components/ui/progress/index.js';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import BasePokemonCard from '$lib/components/basePokemonCard.svelte';

@@ -17,8 +17,8 @@
 				<Card.Description>Gotta Catch 'Em All</Card.Description>
 			</Card.Header>
 			<Card.Content>
-				<Label for="Username">Username</Label>
-				<Input id="Username" name="username" placeholder="Username" />
+				<Label for="username">Username</Label>
+				<Input id="username" name="username" placeholder="Username" />
 				<Label for="passoword">Password</Label>
 				<Input id="passoword" type="password" name="password" placeholder="Password" />
 				<p class="text-sm font-medium leading-none mt-1 text-red-500">{form?.message ?? ''}</p>

@@ -3,7 +3,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { CapturedPokemon } from '$lib/models/pokedex';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import { share } from '$lib/utils/utils';
+	import { share } from '$lib/utils/share';
 	import Share from 'svelte-radix/Share1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import BasePokemonCard from '$lib/components/basePokemonCard.svelte';

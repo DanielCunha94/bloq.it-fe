@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getPokemonsList } from '$lib/services/pokemon';
 	import type { Pokemon } from '$lib/models/pokemon';
-	import Pagination from './(components)/pagination.svelte';
-	import PokemonsTable from './(components)/pokemonsTable.svelte';
+	import Pagination from '../../lib/components/pagination.svelte';
+	import PokemonsTable from '../../lib/components/pokemonsTable.svelte';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import Pokemoncard from './(components)/pokemonCard.svelte';
 	import type { PageData } from './$types';
