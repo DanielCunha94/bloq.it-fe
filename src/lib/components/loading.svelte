@@ -4,12 +4,12 @@
 
 {#if loading}
 	<div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-		<div class="pokeball animate-spin-slow"></div>
+		<div class="pokeball animate-spin-slow" />
+		<p class="invisible w-0 h-0">loading</p>
 	</div>
 {/if}
 
 <style>
-	/* Create a custom spin animation for slower spinning */
 	@keyframes spin-slow {
 		0% {
 			transform: rotate(0deg);
@@ -22,17 +22,15 @@
 		animation: spin-slow 1s linear infinite;
 	}
 
-	/* Pokéball styling */
 	.pokeball {
 		width: 80px;
 		height: 80px;
-		background: linear-gradient(to bottom, #e3350d 50%, #ffffff 50%); /* Red top, white bottom */
+		background: linear-gradient(to bottom, #e3350d 50%, #ffffff 50%);
 		border: 4px solid black;
 		border-radius: 50%;
 		position: relative;
 	}
 
-	/* Pokéball button */
 	.pokeball::before {
 		content: '';
 		position: absolute;
@@ -47,7 +45,6 @@
 		z-index: 10;
 	}
 
-	/* Center dividing line */
 	.pokeball::after {
 		content: '';
 		position: absolute;

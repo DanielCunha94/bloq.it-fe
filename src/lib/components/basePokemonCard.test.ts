@@ -17,7 +17,8 @@ const mockedPokemon: CapturedPokemon = {
 	specialDefense: 65,
 	imgUrl: 'url',
 	createdAt: new Date().toISOString(),
-	note: null
+	note: null,
+	types: []
 };
 
 describe('PokemonCard', () => {

@@ -105,7 +105,7 @@ describe('HttpClient', () => {
 			json: async () => mockData
 		});
 
-		const response = await httpClient.delete<{ success: boolean }>('/items/1');
+		const response = await httpClient.delete<null, { success: boolean }>('/items/1', null);
 
 		expect(fetch).toHaveBeenCalledWith(
 			`${BASE_URL}/items/1`,

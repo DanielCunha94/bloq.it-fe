@@ -67,7 +67,7 @@ export default class HttpClient {
 
 	public async delete<K, T>(
 		url: string,
-		body?: K,
+		body: K,
 		headers: Record<string, string> = {}
 	): Promise<{ hasError: boolean; data: T | null; error: string | null }> {
 		return this.request<T>(url, {
