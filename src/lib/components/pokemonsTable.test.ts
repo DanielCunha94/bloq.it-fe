@@ -3,7 +3,7 @@ import PokemonsTable from './pokemonsTable.svelte';
 import type { Pokemon } from '$lib/models/pokemon';
 import { describe, expect, it } from 'vitest';
 
-describe('PokemonTable Component', () => {
+describe('PokemonTable', () => {
 	const mockPokemons: Pokemon[] = [
 		{
 			id: '1',

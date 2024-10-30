@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { describe, expect, it } from 'vitest';
 import FilterAndSort from './filterAndSort.svelte';
 
-describe('YourComponent', () => {
+describe('FilterAndSort', () => {
 	it('renders sorting and filtering options', () => {
 		render(FilterAndSort);
 
