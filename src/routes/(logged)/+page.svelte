@@ -10,11 +10,12 @@
 	import { myPokemons } from '$lib/stores/pokedex';
 	import type { CapturedPokemon } from '$lib/models/pokedex';
 	import { loading } from '$lib/stores/loading';
+	import { pokemonsCount } from '$lib/stores/pokemon';
 
 	export let data: PageData;
 
 	let pokemons: Pokemon[] = [];
-	let totalCount: number = 0;
+
 	let perPage = 10;
 	let page: number = 1;
 
@@ -22,7 +23,7 @@
 
 	async function loadPokemons(page: number) {
 		$loading = true;
-		({ pokemons, totalCount } = await getPokemonsList(perPage * (page - 1), perPage));
+		({ pokemons } = await getPokemonsList(perPage * (page - 1), perPage));
 		setCapturedPokemons(pokemons, $myPokemons);
 		pokemons = pokemons;
 		$loading = false;
@@ -81,4 +82,4 @@
 	</Tabs.Content>
 </Tabs.Root>
 
-<Pagination bind:page {perPage} {totalCount} loading={$loading} />
+<Pagination bind:page {perPage} totalCount={$pokemonsCount} loading={$loading} />

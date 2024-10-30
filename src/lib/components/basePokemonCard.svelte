@@ -3,7 +3,7 @@
 	import type { CapturedPokemon } from '$lib/models/pokedex';
 	import type { Pokemon } from '$lib/models/pokemon';
 	import { formatDate } from '$lib/utils/time';
-	import Badge from './ui/badge/badge.svelte';;
+	import Badge from './ui/badge/badge.svelte';
 	import { Progress } from './ui/progress';
 
 	export let pokemon: Pokemon | CapturedPokemon;

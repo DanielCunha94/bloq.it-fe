@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { browser, dev } from '$app/environment';
-	import Navbar from '$lib/components/ui/navBar/navbar.svelte';
+	import Navbar from '$lib/components/navbar.svelte';
 	import { onMount } from 'svelte';
 	import { getPokemonsFromPokedex } from '$lib/services/pokedex';
 	import type { LayoutData } from './$types';
 	import { myPokemons } from '$lib/stores/pokedex';
 	import Loading from '$lib/components/loading.svelte';
 	import { loading } from '$lib/stores/loading';
+	import { getPokemonsCount } from '$lib/services/pokemon';
+	import { pokemonsCount } from '$lib/stores/pokemon';
 
 	export let data: LayoutData;
 
@@ -22,9 +24,17 @@
 
 	onMount(async () => {
 		$loading = true;
-		const res = await getPokemonsFromPokedex(data.user.id);
-		if (!res.hasError) {
-			$myPokemons = res.data ?? [];
+		const [countRes, pokedexRes] = await Promise.all([
+			getPokemonsCount(),
+			getPokemonsFromPokedex(data.user.id)
+		]);
+
+		if (!pokedexRes.hasError) {
+			$myPokemons = pokedexRes.data ?? [];
+		}
+
+		if (!countRes.hasError) {
+			$pokemonsCount = countRes.totalCount ?? 0;
 		}
 		$loading = false;
 	});

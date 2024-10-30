@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import { logout } from '$lib/services/auth';
 
 	let isOpen = false;
 
 	function toggleMenu() {
 		isOpen = !isOpen;
+	}
+
+	async function handleLogout() {
+		await logout();
 	}
 </script>
 
@@ -27,12 +32,18 @@
 			>
 				My Pokédex</a
 			>
-			<form method="post" action="?/logout" use:enhance>
-				<button>Sign out</button>
+			<form
+				method="post"
+				on:submit={() => {
+					handleLogout();
+				}}
+			>
+				<button type="submit">Sign out</button>
 			</form>
 		</div>
 
 		<button
+			aria-label="burger-button"
 			class="md:hidden focus:outline-none focus:ring-2 focus:ring-gray-600"
 			on:click={toggleMenu}
 		>

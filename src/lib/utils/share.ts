@@ -1,3 +1,5 @@
+import { toast } from 'svelte-sonner';
+
 export async function share(shareObject: { title: string; text: string; url?: string }) {
 	try {
 		if (navigator.share) {
@@ -6,6 +8,6 @@ export async function share(shareObject: { title: string; text: string; url?: st
 			await navigator.clipboard.writeText(shareObject.text);
 		}
 	} catch {
-		console.log('share fail');
+		toast.error('share fail');
 	}
 }

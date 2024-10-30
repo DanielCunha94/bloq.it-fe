@@ -60,7 +60,6 @@ describe('PokemonTable Component', () => {
 	it('displays the correct pokemon data in each cell', () => {
 		render(PokemonsTable, { pokemons: mockPokemons });
 
-	
 		expect(screen.getByText('Pikachu')).toBeInTheDocument();
 		expect(screen.getByText('4')).toBeInTheDocument(); // height
 		expect(screen.getByText('60')).toBeInTheDocument(); // weight

@@ -39,7 +39,7 @@ describe('YourComponent', () => {
 	it('dispatches filter event when filter input changes', async () => {
 		const { component } = render(FilterAndSort);
 		const user = userEvent.setup();
-	
+
 		const filterInput = screen.getByPlaceholderText('filter input');
 
 		await user.type(filterInput, 'Ivysaur');
