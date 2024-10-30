@@ -71,8 +71,6 @@ describe('HttpClient', () => {
 		expect(response).toEqual({ hasError: true, data: null, error: 'Request failed' });
 	});
 
-	// Similar tests can be written for PUT, DELETE, PATCH methods.
-
 	it('should make a PUT request with body and return data', async () => {
 		const requestBody = { name: 'Updated Item' };
 		const mockData = { id: 1, name: 'Updated Item' };

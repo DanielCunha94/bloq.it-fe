@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/svelte';
-import PokemonsTable from './pokemonsTable.svelte'; // Update with your actual file path
+import PokemonsTable from './pokemonsTable.svelte';
 import type { Pokemon } from '$lib/models/pokemon';
 import { describe, expect, it } from 'vitest';
 
@@ -37,7 +37,7 @@ describe('PokemonTable Component', () => {
 
 	it('renders table headers correctly', () => {
 		render(PokemonsTable, { pokemons: mockPokemons });
-		
+
 		expect(screen.getByText('Name')).toBeInTheDocument();
 		expect(screen.getByText('Height')).toBeInTheDocument();
 		expect(screen.getByText('Weight')).toBeInTheDocument();

@@ -1,7 +1,5 @@
-// BasePokemonCard.test.ts
 import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
-
 import { isOnline } from '$lib/stores/conection';
 import { share } from '$lib/utils/share';
 import { tick } from 'svelte';
