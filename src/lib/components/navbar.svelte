@@ -20,7 +20,7 @@
 </script>
 
 <nav class="bg-card text-foreground">
-	<div class="container mx-auto px-4 py-4 flex justify-between items-center">
+	<div class="mx-auto md:mx-4 px-4 py-4 flex justify-between items-center">
 		<div class="text-2xl font-semibold flex items-center gap-3">
 			<img src="/pokebloq_it.png" class="max-w-[150px]" alt="the logo of the app (pokebloq.it)" />
 			<div
