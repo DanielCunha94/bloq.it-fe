@@ -15,7 +15,8 @@ export const session = sqliteTable('session', {
 });
 
 export const capturedPokemon = sqliteTable('captured_pokemon', {
-	id: text('id').primaryKey(),
+	dbId: text('db_id').primaryKey(),
+	id: text('id').notNull(),
 	userId: text('user_id')
 		.notNull()
 		.references(() => user.id),

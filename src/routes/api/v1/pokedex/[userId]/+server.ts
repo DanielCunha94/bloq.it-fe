@@ -36,6 +36,7 @@ export const POST: RequestHandler<Params> = async ({ params, request, locals }) 
 
 	try {
 		await db.insert(capturedPokemon).values({
+			dbId: crypto.randomUUID(),
 			id,
 			userId,
 			name,
