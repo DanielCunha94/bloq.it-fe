@@ -1,38 +1,87 @@
-# create-svelte
+# Frontend Engineering Challenge, by Bloqit
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## Features
 
-## Creating a project
+### 🕹 Core Functionalities
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Comprehensive Pokémon Index**: View all available Pokémon with names and images.
+- **Caught Pokémon Tracking**: See which Pokémon you’ve caught and mark them off your list.
+- **Detailed Stats & Info**: Access key details on each Pokémon, including:
+  - Height, Weight, Health (HP), Speed, Attack, Defense, Special Attack, Special Defense, Types.
+  - date of when the Pokémon was added to your Pokédex.
+- **Pokémon Sharing**: Easily share your caught Pokémon with fellow Trainers.
 
-```bash
-# create a new project in the current directory
-npx sv create
+### 🔥 Advanced Capabilities
 
-# create a new project in my-app
-npx sv create my-app
-```
+- **Offline Access**: Access your Pokédex with limited or no internet connectivity.
+- **Progress Overview**: Quickly visualize your Pokédex progress.
+- **Pokédex Management**: Filter, sort, and manage Pokémon with options to:
+  - Filter and sort by name, height, type, and timestamp.
+  - Remove multiple entries at once.
+  - Attach personal notes to each Pokémon.
+- **View Modes**: Switch between analytical (table) views and mobile-friendly modes (Cards).
+- **Data Export**: Export your entire Pokédex to a CSV for external use.
 
-## Developing
+## Tech Stack
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Core Technologies
 
-```bash
-npm run dev
+- **[SvelteKit](https://kit.svelte.dev/)**
+- **TypeScript**
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### UI & Styling
 
-## Building
+- **[Tailwind CSS](https://tailwindcss.com/)**
 
-To create a production version of your app:
+### Database & ORM
 
-```bash
-npm run build
-```
+- **[DrizzleORM](https://orm.drizzle.team/)**
 
-You can preview the production build with `npm run preview`.
+### Authentication
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- **[Lucia Auth](https://lucia-auth.com/)**
+
+### Tooling & Build System
+
+- **[Vite](https://vitejs.dev/)**
+
+### Testing
+
+- **Testing Library**
+- **Vitest**
+
+### Data & API
+
+- **[PokéAPI](https://pokeapi.co/)**
+- **[SQLLite](https://pokeapi.co/)**
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js**: Ensure you have Node.js and npm installed.
+
+### Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/DanielCunha94/bloq.it-fe.git
+   ```
+
+2. **Setup Drizzle**:
+
+   ```bash
+   npm run db:push
+   ```
+
+3. **Run**:
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Run**:
+   ```bash
+   npm run test
+   ```
