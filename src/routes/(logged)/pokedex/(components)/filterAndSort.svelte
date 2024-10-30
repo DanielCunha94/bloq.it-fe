@@ -58,9 +58,9 @@
 			}}
 		>
 			{#if sortDirection === 'asc'}
-				<ArrowUp class="h-4 w-4" />
+				<ArrowUp class="h-4 w-4" ariaLabel="sort-asc" />
 			{:else}
-				<ArrowDown class="h-4 w-4" />
+				<ArrowDown class="h-4 w-4" ariaLabel="sort-desc" />
 			{/if}
 			<p class="invisible w-0 h-0">{sortDirection}</p>
 		</Button>

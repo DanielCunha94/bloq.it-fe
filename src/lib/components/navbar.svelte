@@ -5,7 +5,7 @@
 	import { logout } from '$lib/services/auth';
 	import { isOnline } from '$lib/stores/conection';
 
-	let isOpen = false;
+	let isOpen: boolean = false;
 
 	function toggleMenu() {
 		isOpen = !isOpen;

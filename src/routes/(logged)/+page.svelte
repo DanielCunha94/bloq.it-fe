@@ -8,15 +8,13 @@
 	import { addPokemonToPokedex } from '$lib/services/pokedex';
 	import { toast } from 'svelte-sonner';
 	import { myPokemons } from '$lib/stores/pokedex';
-	import type { CapturedPokemon } from '$lib/models/pokedex';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 
 	export let data: PageData;
 
 	let pokemons: Pokemon[] = [];
-
-	let perPage = 10;
+	let perPage: number = 10;
 	let page: number = 1;
 
 	$: loadPokemons(page);
@@ -32,22 +30,23 @@
 	async function handleAddToPokedex(pokemon: Pokemon) {
 		$loading = true;
 		const res = await addPokemonToPokedex(data.user.id, pokemon);
-
 		if (res.hasError) {
 			toast.error('Fail to add to pokedex');
 			$loading = false;
 			return;
 		}
-
 		toast.success(`${pokemon.name} add to pokedex`);
 
-		const newCapturedPokemon: CapturedPokemon = {
-			...pokemon,
-			note: null,
-			createdAt: new Date().toISOString()
-		};
-		$myPokemons = [...$myPokemons, newCapturedPokemon];
+		$myPokemons = [
+			...$myPokemons,
+			{
+				...pokemon,
+				note: null,
+				createdAt: new Date().toISOString()
+			}
+		];
 		setCapturedPokemons(pokemons, $myPokemons);
+
 		pokemons = pokemons;
 		$loading = false;
 	}

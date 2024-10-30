@@ -37,8 +37,7 @@ describe('PokemonTable Component', () => {
 
 	it('renders table headers correctly', () => {
 		render(PokemonsTable, { pokemons: mockPokemons });
-
-		// Check that each header cell is rendered
+		
 		expect(screen.getByText('Name')).toBeInTheDocument();
 		expect(screen.getByText('Height')).toBeInTheDocument();
 		expect(screen.getByText('Weight')).toBeInTheDocument();

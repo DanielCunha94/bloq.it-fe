@@ -97,9 +97,9 @@
 </script>
 
 <div class="flex justify-end mx-4 mt-3 gap-3">
-	<Button aria-label="delete" variant="destructive" disabled={!$isOnline} on:click={handleDelete}
-		><Trash /></Button
-	>
+	<Button aria-label="delete" variant="destructive" disabled={!$isOnline} on:click={handleDelete}>
+		<Trash />
+	</Button>
 	<Button
 		variant="secondary"
 		on:click={() => {

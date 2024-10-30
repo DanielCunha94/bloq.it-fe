@@ -2,7 +2,7 @@
 	import * as Pagination from '$lib/components/ui/pagination';
 
 	export let totalCount: number = 0;
-	export let perPage = 10;
+	export let perPage: number = 10;
 	export let page: number = 1;
 	export let loading: boolean = false;
 </script>

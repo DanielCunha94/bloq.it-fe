@@ -24,13 +24,11 @@
 	}
 
 	onMount(async () => {
-		$isOnline = navigator.onLine;
-		window.addEventListener('online', () => {
-			$isOnline = true;
-		});
-		window.addEventListener('offline', () => {
-			$isOnline = false;
-		});
+		handleOnline();
+		load();
+	});
+
+	async function load() {
 		const [countRes, pokedexRes] = await Promise.all([
 			getPokemonsCount(),
 			getPokemonsFromPokedex(data.user.id)
@@ -43,7 +41,17 @@
 		if (!countRes.hasError) {
 			$pokemonsCount = countRes.totalCount ?? 0;
 		}
-	});
+	}
+
+	async function handleOnline() {
+		$isOnline = navigator.onLine;
+		window.addEventListener('online', () => {
+			$isOnline = true;
+		});
+		window.addEventListener('offline', () => {
+			$isOnline = false;
+		});
+	}
 </script>
 
 <Navbar />
