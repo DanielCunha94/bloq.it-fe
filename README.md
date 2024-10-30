@@ -47,13 +47,13 @@
 
 ### Testing
 
-- **Testing Library**
-- **Vitest**
+- **[Testing Library](https://testing-library.com/)**
+- **[Vitest](https://vitest.dev/)**
 
 ### Data & API
 
 - **[PokéAPI](https://pokeapi.co/)**
-- **[SQLLite](https://pokeapi.co/)**
+- **[SQLLite](https://www.sqlite.org/)**
 
 ## Getting Started
 
@@ -69,19 +69,22 @@
    git clone https://github.com/DanielCunha94/bloq.it-fe.git
    ```
 
-2. **Setup Drizzle**:
+2. **Add a .env file**:
+   check .env.example
+
+3. **Setup Drizzle**:
 
    ```bash
    npm run db:push
    ```
 
-3. **Run**:
+4. **Run**:
 
    ```bash
    npm run dev
    ```
 
-4. **Run**:
+5. **Run**:
    ```bash
    npm run test
    ```
