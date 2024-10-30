@@ -18,3 +18,9 @@ export async function addNoteToPokemon(userId: string, pokemonId: string, note: 
 		note
 	});
 }
+
+export async function deletePokemons(userId: string, ids: string[]) {
+	return api.delete(`/api/v1/pokedex/${userId}`, {
+		ids
+	});
+}

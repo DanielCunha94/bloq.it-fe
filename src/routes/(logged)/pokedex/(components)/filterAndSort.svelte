@@ -9,12 +9,11 @@
 
 	let sortDirection: SortDirection = 'asc';
 	let sortKey: FilterAndSortOptions = 'name';
-
+	let filterValue: string;
 	let filterOption: { value: FilterAndSortOptions; type: string } = {
 		value: 'name',
 		type: 'text'
 	};
-	let filterValue: string;
 
 	const filterAndSortOptions = [
 		{ value: 'name', label: 'Name' },
@@ -26,6 +25,7 @@
 	const dispatchSort = createEventDispatcher<{
 		sort: { key: FilterAndSortOptions; direction: SortDirection };
 	}>();
+
 	const dispatchFilter = createEventDispatcher<{
 		filter: {
 			key: FilterAndSortOptions;

@@ -1,15 +1,19 @@
-import { json, type RequestHandler } from '@sveltejs/kit';
+import { json, redirect, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { capturedPokemon } from '$lib/server/db/schema';
 import type { Pokemon } from '$lib/models/pokemon';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import type { CapturedPokemon } from '$lib/models/pokedex';
 
 type Params = {
 	userId: string;
 };
 
-export const POST: RequestHandler<Params> = async ({ params, request }) => {
+export const POST: RequestHandler<Params> = async ({ params, request, locals }) => {
+	if (!locals.session || !locals.session.userId) {
+		throw redirect(302, '/login');
+	}
+
 	const { userId } = params;
 	const {
 		id,
@@ -56,7 +60,11 @@ export const POST: RequestHandler<Params> = async ({ params, request }) => {
 	}
 };
 
-export const GET: RequestHandler<Params> = async ({ params }) => {
+export const GET: RequestHandler<Params> = async ({ params, locals }) => {
+	if (!locals.session || !locals.session.userId) {
+		throw redirect(302, '/login');
+	}
+
 	const { userId } = params;
 
 	if (!userId) {
@@ -81,3 +89,25 @@ export const GET: RequestHandler<Params> = async ({ params }) => {
 		return json({ error: 'Internal Server Error' }, { status: 500 });
 	}
 };
+
+export async function DELETE({ request, locals }) {
+	if (!locals.session || !locals.session.userId) {
+		throw redirect(302, '/login');
+	}
+
+	const data = await request.json();
+	const { ids } = data;
+
+	if (!Array.isArray(ids) || ids.length === 0) {
+		return json({ error: 'Invalid request. No IDs provided.' }, { status: 400 });
+	}
+
+	try {
+		await db.delete(capturedPokemon).where(inArray(capturedPokemon.id, ids));
+
+		return json({ success: true, message: 'Pokémon deleted successfully' });
+	} catch (error) {
+		console.error('Error deleting captured Pokémon:', error);
+		return json({ error: 'An error occurred while deleting Pokémons' }, { status: 500 });
+	}
+}

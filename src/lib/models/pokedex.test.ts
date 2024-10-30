@@ -115,7 +115,7 @@ describe('filterPokemons', () => {
 			defense: 49,
 			specialAttack: 65,
 			specialDefense: 65,
-			imgUrl: 'http://example.com/bulbasaur.png',
+			imgUrl: 'url',
 			createdAt: new Date('2024-10-28'),
 			note: 'First Pokémon',
 			types: ['Grass', 'Poison']
@@ -131,7 +131,7 @@ describe('filterPokemons', () => {
 			defense: 43,
 			specialAttack: 60,
 			specialDefense: 50,
-			imgUrl: 'http://example.com/charmander.png',
+			imgUrl: 'url',
 			createdAt: new Date('2024-10-29'),
 			note: 'Fire type',
 			types: ['Fire']
@@ -147,7 +147,7 @@ describe('filterPokemons', () => {
 			defense: 65,
 			specialAttack: 50,
 			specialDefense: 64,
-			imgUrl: 'http://example.com/squirtle.png',
+			imgUrl: 'url',
 			createdAt: new Date('2024-10-27'),
 			note: null,
 			types: ['Water']

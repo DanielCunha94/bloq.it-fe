@@ -5,6 +5,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import BasePokemonCard from '$lib/components/basePokemonCard.svelte';
 	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
+
 	export let pokemon: Pokemon;
 
 	const dispatch = createEventDispatcher<{ addToPokedex: undefined }>();

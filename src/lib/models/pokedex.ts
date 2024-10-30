@@ -16,6 +16,7 @@ export type CapturedPokemon = {
 	createdAt: Date | string;
 	note: string | null;
 	types: string[];
+	checked?: boolean;
 };
 
 export function capturedPokemonsToCSV(pokemons: CapturedPokemon[]) {

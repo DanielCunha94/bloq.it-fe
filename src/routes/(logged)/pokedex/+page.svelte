@@ -1,8 +1,7 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import type { PageData } from './$types';
-	import { addNoteToPokemon } from '$lib/services/pokedex';
-	import PokemonsCard from './(components)/pokemonsCard.svelte';
+	import { addNoteToPokemon, deletePokemons } from '$lib/services/pokedex';
 	import {
 		capturedPokemonsToCSV,
 		filterPokemons,
@@ -18,32 +17,41 @@
 	import { toast } from 'svelte-sonner';
 	import FilterAndSort from './(components)/filterAndSort.svelte';
 	import type { FilterAndSortOptions, SortDirection } from '$lib/models/common';
+	import Trash from 'svelte-radix/Trash.svelte';
+	import { loading } from '$lib/stores/loading';
 
 	export let data: PageData;
 
 	let pokemons: CapturedPokemon[] = [];
 	let perPage = 10;
 	let page: number = 1;
-	let loading = false;
 	let filter: { key: FilterAndSortOptions; value: string };
 	let sort: { key: FilterAndSortOptions; direction: SortDirection } = {
 		key: 'name',
 		direction: 'asc'
 	};
 
-	$: onChange($myPokemons);
+	$: onChangeMyPokemons($myPokemons);
 
 	function handleCSV() {
 		downloadCSV(capturedPokemonsToCSV(pokemons), 'My_Pokemons.csv');
 	}
 
 	async function handleAddNote(note: string, pokemon: CapturedPokemon) {
+		$loading = true;
 		const res = await addNoteToPokemon(data.user.id, pokemon.id, note);
 		if (res.hasError) {
 			toast.error('Fail to add note');
+			$loading = false;
 			return;
 		}
 		toast.success(`Note added to ${pokemon.name}`);
+
+		const indexToUpdate = $myPokemons.findIndex((p) => p.id === pokemon.id);
+		if (indexToUpdate != -1) {
+			$myPokemons[indexToUpdate].note = note;
+		}
+		$loading = false;
 	}
 
 	function filterAndSort(capturedPokemons: CapturedPokemon[]) {
@@ -62,15 +70,31 @@
 		}
 
 		pokemons = [...filterAndSorted];
-		console.log(pokemons);
 	}
 
-	function onChange(capturedPokemons: CapturedPokemon[]) {
-		filterAndSort(capturedPokemons);
+	function onChangeMyPokemons(pokemons: CapturedPokemon[]) {
+		filterAndSort(pokemons);
+	}
+
+	async function handleDelete() {
+		$loading = true;
+		const deleteIds = pokemons.filter((p) => p.checked).map((p) => p.id);
+		if (deleteIds.length) {
+			const res = await deletePokemons(data.user.id, deleteIds);
+			if (res.hasError) {
+				toast.error('Fail to delete pokemons');
+				$loading = false;
+				return;
+			}
+			toast.success(`pokemons deleted`);
+			$myPokemons = $myPokemons.filter((p) => !deleteIds.includes(p.id));
+		}
+		$loading = false;
 	}
 </script>
 
-<div class="flex justify-end mx-4 mt-3">
+<div class="flex justify-end mx-4 mt-3 gap-3">
+	<Button aria-label="delete" variant="destructive" on:click={handleDelete}><Trash /></Button>
 	<Button
 		variant="secondary"
 		on:click={() => {
@@ -84,11 +108,8 @@
 
 <FilterAndSort
 	on:filter={(e) => {
-		console.log(e);
 		filter = { key: e.detail.key, value: e.detail.value };
 		filterAndSort($myPokemons);
-
-		console.log(pokemons);
 	}}
 	on:sort={(e) => {
 		sort = { key: e.detail.key, direction: e.detail.direction };
@@ -105,20 +126,37 @@
 	</div>
 	<Tabs.Content value="table">
 		<div class="mx-4 md:mx-20 mt-5">
-			<PokemonsTable {pokemons} />
+			{#if $myPokemons?.length}
+				<PokemonsTable pokemons={pokemons.slice((page - 1) * perPage, page * perPage)} />
+			{:else}
+				<div class="flex justify-center items-center">
+					<p class="">No pokemons added to pokédex</p>
+				</div>
+			{/if}
 		</div>
 	</Tabs.Content>
 	<Tabs.Content value="card">
-		<div class="flex flex-wrap gap-4 justify-center">
-			{#each pokemons as pokemon, i (i)}
-				<PokemonsCard
-					{pokemon}
-					on:addNote={(e) => {
-						handleAddNote(e.detail.note, pokemon);
-					}}
-				/>
-			{/each}
+		<div class="flex flex-wrap gap-4 justify-center mt-5">
+			{#if $myPokemons?.length}
+				{#each pokemons.slice((page - 1) * perPage, page * perPage) as pokemon, i (i)}
+					{#await import('./(components)/pokemonsCard.svelte') then PokemonCard}
+						<PokemonCard.default
+							{pokemon}
+							on:addNote={(e) => {
+								handleAddNote(e.detail.note, pokemon);
+							}}
+						/>
+					{/await}
+				{/each}
+			{:else}
+				<div class="flex justify-center items-center">
+					<p class="">No pokemons added to pokédex</p>
+				</div>
+			{/if}
 		</div>
 	</Tabs.Content>
 </Tabs.Root>
-<Pagination bind:page {perPage} totalCount={pokemons.length} {loading} />
+
+{#if pokemons?.length}
+	<Pagination bind:page {perPage} totalCount={pokemons.length} loading={$loading} />
+{/if}

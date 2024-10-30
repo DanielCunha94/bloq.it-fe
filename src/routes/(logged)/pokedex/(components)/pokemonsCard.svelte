@@ -5,13 +5,14 @@
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { share } from '$lib/utils/share';
 	import Share from 'svelte-radix/Share1.svelte';
-	import Trash from 'svelte-radix/Trash.svelte';
 	import BasePokemonCard from '$lib/components/basePokemonCard.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { FormTextareaEvent } from '$lib/components/ui/textarea';
+	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+	import Label from '$lib/components/ui/label/label.svelte';
 
 	export let pokemon: CapturedPokemon;
-	
+
 	let note: string;
 
 	const dispatch = createEventDispatcher<{ addNote: { note: string } }>();
@@ -19,13 +20,11 @@
 	function handleShare() {
 		const text = `${pokemon.name} (HP: ${pokemon.health}, Height: ${pokemon.height}, Weight: ${pokemon.weight})`;
 		share({
-			title: `Check out ${pokemon.name}!`,
+			title: `Check out my ${pokemon.name}!`,
 			text,
 			url: pokemon.imgUrl ? pokemon.imgUrl : undefined
 		});
 	}
-
-	function handleDelete() {}
 
 	function handleInput(e: FormTextareaEvent<InputEvent>) {
 		const inputValue = (e.target as HTMLInputElement).value;
@@ -41,9 +40,16 @@
 <Card.Root class="w-[350px]">
 	<BasePokemonCard {pokemon} />
 	<Card.Footer class="flex-col">
-		<div>
-			<Button aria-label="share" variant="outline" on:click={handleShare}><Share /></Button>
-			<Button aria-label="delete" variant="destructive" on:click={handleDelete}><Trash /></Button>
+		<Button aria-label="share" variant="outline" on:click={handleShare}><Share /></Button>
+
+		<div class="flex items-center space-x-2 mt-3">
+			<Checkbox id="terms" bind:checked={pokemon.checked} />
+			<Label
+				for="terms"
+				class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+			>
+				To delete
+			</Label>
 		</div>
 
 		<Textarea

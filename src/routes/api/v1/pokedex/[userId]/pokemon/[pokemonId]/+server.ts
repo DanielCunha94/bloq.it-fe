@@ -1,4 +1,4 @@
-import { json, type RequestHandler } from '@sveltejs/kit';
+import { json, redirect, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { capturedPokemon } from '$lib/server/db/schema';
 import { eq, and } from 'drizzle-orm';
@@ -12,7 +12,11 @@ type UpdateNotesRequestBody = {
 	note: string;
 };
 
-export const PATCH: RequestHandler<Params> = async ({ params, request }) => {
+export const PATCH: RequestHandler<Params> = async ({ params, request, locals }) => {
+	if (!locals.session || !locals.session.userId) {
+		throw redirect(302, '/login');
+	}
+
 	const { userId, pokemonId } = params;
 
 	const requestBody = (await request.json()) as UpdateNotesRequestBody;

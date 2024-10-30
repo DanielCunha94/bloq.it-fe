@@ -4,17 +4,16 @@
 	import Pagination from '$lib/components/pagination.svelte';
 	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import Pokemoncard from './(components)/pokemonCard.svelte';
 	import type { PageData } from './$types';
 	import { addPokemonToPokedex } from '$lib/services/pokedex';
 	import { toast } from 'svelte-sonner';
 	import { myPokemons } from '$lib/stores/pokedex';
 	import type { CapturedPokemon } from '$lib/models/pokedex';
+	import { loading } from '$lib/stores/loading';
 
 	export let data: PageData;
 
 	let pokemons: Pokemon[] = [];
-	let loading = false;
 	let totalCount: number = 0;
 	let perPage = 10;
 	let page: number = 1;
@@ -22,18 +21,20 @@
 	$: loadPokemons(page);
 
 	async function loadPokemons(page: number) {
-		loading = true;
+		$loading = true;
 		({ pokemons, totalCount } = await getPokemonsList(perPage * (page - 1), perPage));
 		setCapturedPokemons(pokemons, $myPokemons);
 		pokemons = pokemons;
-		loading = false;
+		$loading = false;
 	}
 
 	async function handleAddToPokedex(pokemon: Pokemon) {
+		$loading = true;
 		const res = await addPokemonToPokedex(data.user.id, pokemon);
 
 		if (res.hasError) {
 			toast.error('Fail to add to pokedex');
+			$loading = false;
 			return;
 		}
 
@@ -47,6 +48,7 @@
 		$myPokemons = [...$myPokemons, newCapturedPokemon];
 		setCapturedPokemons(pokemons, $myPokemons);
 		pokemons = pokemons;
+		$loading = false;
 	}
 </script>
 
@@ -66,15 +68,17 @@
 	<Tabs.Content value="card">
 		<div class="flex flex-wrap gap-4 justify-center">
 			{#each pokemons as pokemon, i (i)}
-				<Pokemoncard
-					{pokemon}
-					on:addToPokedex={() => {
-						handleAddToPokedex(pokemon);
-					}}
-				/>
+				{#await import('./(components)/pokemonCard.svelte') then PokemonCard}
+					<PokemonCard.default
+						{pokemon}
+						on:addToPokedex={() => {
+							handleAddToPokedex(pokemon);
+						}}
+					/>
+				{/await}
 			{/each}
 		</div>
 	</Tabs.Content>
 </Tabs.Root>
 
-<Pagination bind:page {perPage} {totalCount} {loading} />
+<Pagination bind:page {perPage} {totalCount} loading={$loading} />
