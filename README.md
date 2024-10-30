@@ -69,23 +69,33 @@
    git clone https://github.com/DanielCunha94/bloq.it-fe.git
    ```
 
-2. **Add a .env file**:
+2. **Add dependencies**:
+
+   ```bash
+   npm i
+   ```
+
+3. **Add a .env file**:
+
    - check .env.example
 
-3. **Setup Drizzle**:
+4. **Setup Drizzle**:
 
    ```bash
    npm run db:push
    ```
 
-4. **Run**:
+5. **Run**:
 
    ```bash
    npm run dev
    ```
 
-5. **Run**:
+6. **Run**:
    ```bash
    npm run test
    ```
-*Cunha 2024*
+
+
+   
+   _Cunha 2024_
