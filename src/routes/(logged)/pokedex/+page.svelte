@@ -19,6 +19,8 @@
 	import type { FilterAndSortOptions, SortDirection } from '$lib/models/common';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import { loading } from '$lib/stores/loading';
+	import { pokemonsCount } from '$lib/stores/pokemon';
+	import Progress from '$lib/components/ui/progress/progress.svelte';
 
 	export let data: PageData;
 
@@ -123,6 +125,10 @@
 			<Tabs.Trigger value="table">Table View</Tabs.Trigger>
 			<Tabs.Trigger value="card">Cards View</Tabs.Trigger>
 		</Tabs.List>
+	</div>
+	<div class="flex flex-col lg:flex-row justify-center mt-5 items-center gap-4">
+		<Progress value={$myPokemons.length} max={$pokemonsCount} class="w-[50%]" />
+		<p>{`${$myPokemons.length} of ${$pokemonsCount} pokemons added to pokédex`}</p>
 	</div>
 	<Tabs.Content value="table">
 		<div class="mx-4 md:mx-20 mt-5">

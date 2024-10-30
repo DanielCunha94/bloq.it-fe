@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { logout } from '$lib/services/auth';
 
@@ -10,7 +11,10 @@
 	}
 
 	async function handleLogout() {
-		await logout();
+		const res = await logout();
+		if (!res.hasError) {
+			await goto('/login');
+		}
 	}
 </script>
 
@@ -33,8 +37,7 @@
 				My Pokédex</a
 			>
 			<form
-				method="post"
-				on:submit={() => {
+				on:submit|preventDefault={() => {
 					handleLogout();
 				}}
 			>
