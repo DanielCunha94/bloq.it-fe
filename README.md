@@ -36,6 +36,7 @@
 ### Database & ORM
 
 - **[DrizzleORM](https://orm.drizzle.team/)**
+- **[SQLLite](https://www.sqlite.org/)**
 
 ### Authentication
 
@@ -53,7 +54,7 @@
 ### Data & API
 
 - **[PokéAPI](https://pokeapi.co/)**
-- **[SQLLite](https://www.sqlite.org/)**
+
 
 ## Getting Started
 
@@ -97,5 +98,5 @@
    ```
 
 
-   
+
    _Cunha 2024_
