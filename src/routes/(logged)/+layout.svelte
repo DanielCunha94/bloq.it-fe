@@ -23,7 +23,6 @@
 	}
 
 	onMount(async () => {
-		$loading = true;
 		const [countRes, pokedexRes] = await Promise.all([
 			getPokemonsCount(),
 			getPokemonsFromPokedex(data.user.id)
@@ -36,7 +35,6 @@
 		if (!countRes.hasError) {
 			$pokemonsCount = countRes.totalCount ?? 0;
 		}
-		$loading = false;
 	});
 </script>
 
