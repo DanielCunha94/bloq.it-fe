@@ -70,7 +70,7 @@
    ```
 
 2. **Add a .env file**:
-   check .env.example
+   - check .env.example
 
 3. **Setup Drizzle**:
 
