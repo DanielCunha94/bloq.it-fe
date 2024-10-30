@@ -147,16 +147,16 @@
 	<Tabs.Content value="card">
 		<div class="flex flex-wrap gap-4 justify-center mt-5">
 			{#if $myPokemons?.length}
-				{#each pokemons.slice((page - 1) * perPage, page * perPage) as pokemon, i (i)}
-					{#await import('./(components)/pokemonsCard.svelte') then PokemonCard}
+				{#await import('./(components)/pokemonsCard.svelte') then PokemonCard}
+					{#each pokemons.slice((page - 1) * perPage, page * perPage) as pokemon, i (i)}
 						<PokemonCard.default
 							{pokemon}
 							on:addNote={(e) => {
 								handleAddNote(e.detail.note, pokemon);
 							}}
 						/>
-					{/await}
-				{/each}
+					{/each}
+				{/await}
 			{:else}
 				<div class="flex justify-center items-center">
 					<p class="">No pokemons added to pokédex</p>

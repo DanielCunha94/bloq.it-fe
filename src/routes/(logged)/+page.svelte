@@ -67,16 +67,16 @@
 	</Tabs.Content>
 	<Tabs.Content value="card">
 		<div class="flex flex-wrap gap-4 justify-center">
-			{#each pokemons as pokemon, i (i)}
-				{#await import('./(components)/pokemonCard.svelte') then PokemonCard}
+			{#await import('./(components)/pokemonCard.svelte') then PokemonCard}
+				{#each pokemons as pokemon, i (i)}
 					<PokemonCard.default
 						{pokemon}
 						on:addToPokedex={() => {
 							handleAddToPokedex(pokemon);
 						}}
 					/>
-				{/await}
-			{/each}
+				{/each}
+			{/await}
 		</div>
 	</Tabs.Content>
 </Tabs.Root>
