@@ -23,7 +23,7 @@
 			<Button variant="ghost" disabled={!$isOnline} on:click={handleClick}>Add to my pokedex</Button
 			>
 		{:else}
-			<CheckCircled />
+			<CheckCircled data-testid="CheckCircled" />
 		{/if}
 	</Card.Footer>
 </Card.Root>

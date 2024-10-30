@@ -41,7 +41,13 @@
 <Card.Root class="w-[350px]">
 	<BasePokemonCard {pokemon} />
 	<Card.Footer class="flex-col">
-		<Button aria-label="share" variant="outline" disabled={!$isOnline} on:click={handleShare}>
+		<Button
+			aria-label="share"
+			data-testid="share"
+			variant="outline"
+			disabled={!$isOnline}
+			on:click={handleShare}
+		>
 			<Share />
 		</Button>
 
@@ -56,6 +62,7 @@
 		</div>
 
 		<Textarea
+			data-testid="text-area"
 			disabled={!$isOnline}
 			value={pokemon.note}
 			class="mt-3"
@@ -64,6 +71,7 @@
 		/>
 		<div class="flex justify-end w-full">
 			<Button
+				data-testid="button-add-note"
 				class="mt-3"
 				aria-label="share"
 				variant="outline"

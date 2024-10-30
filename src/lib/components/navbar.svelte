@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { logout } from '$lib/services/auth';
 	import { isOnline } from '$lib/stores/conection';
+	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
 
 	let isOpen: boolean = false;
 
@@ -57,20 +57,7 @@
 			class="md:hidden focus:outline-none focus:ring-2 focus:ring-gray-600"
 			on:click={toggleMenu}
 		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-6 w-6"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M4 6h16M4 12h16M4 18h16"
-				/>
-			</svg>
+			<HamburgerMenu />
 		</button>
 	</div>
 
@@ -78,15 +65,21 @@
 		<a
 			href="/"
 			class={`block px-4 py-2 transition duration-300 hover:text-primary ${$page.url.pathname == '/' ? 'text-primary' : ''}`}
-			>Pokémon</a
 		>
+			Pokémon
+		</a>
 		<a
 			href="/pokedex"
 			class={`block px-4 py-2 transition duration-300 hover:text-primary ${$page.url.pathname == '/pokedex' ? 'text-primary' : ''}`}
-			>My Pokédex</a
 		>
-		<form method="post" action="?/logout" use:enhance>
-			<button class="px-4 py-2"> Sign out</button>
+			My Pokédex
+		</a>
+		<form
+			on:submit|preventDefault={() => {
+				handleLogout();
+			}}
+		>
+			<button class="px-4 py-2" type="submit">Sign out</button>
 		</form>
 	</div>
 </nav>
