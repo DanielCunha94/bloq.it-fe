@@ -13,6 +13,14 @@
 	<form method="post" action="?/login" use:enhance>
 		<Card.Root class="w-[350px]">
 			<Card.Header>
+				<div class="flex justify-center">
+					<img
+						loading="lazy"
+						src="/pokebloq_it.png"
+						class="max-w-[150px]"
+						alt="the logo of the app (pokebloq.it)"
+					/>
+				</div>
 				<Card.Title>Login</Card.Title>
 				<Card.Description>Gotta Catch 'Em All</Card.Description>
 			</Card.Header>

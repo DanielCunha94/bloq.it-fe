@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { logout } from '$lib/services/auth';
+	import { isOnline } from '$lib/stores/conection';
 
 	let isOpen = false;
 
@@ -20,8 +21,14 @@
 
 <nav class="bg-card text-foreground">
 	<div class="container mx-auto px-4 py-4 flex justify-between items-center">
-		<div class="text-2xl font-semibold">
-			<p>PokeBloq.it</p>
+		<div class="text-2xl font-semibold flex items-center gap-3">
+			<img src="/pokebloq_it.png" class="max-w-[150px]" alt="the logo of the app (pokebloq.it)" />
+			<div
+				class="w-2 h-2 rounded-full bg-green-500"
+				class:!bg-red-500={!$isOnline}
+				title={$isOnline ? 'Online' : 'Offline'}
+			/>
+			<small class="text-sm font-medium leading-none">{$isOnline ? 'Online' : 'Offline'}</small>
 		</div>
 
 		<div class="hidden md:flex space-x-8 bg-card text-card-foreground">

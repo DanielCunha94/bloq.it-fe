@@ -9,6 +9,7 @@
 	import { loading } from '$lib/stores/loading';
 	import { getPokemonsCount } from '$lib/services/pokemon';
 	import { pokemonsCount } from '$lib/stores/pokemon';
+	import { isOnline } from '$lib/stores/conection';
 
 	export let data: LayoutData;
 
@@ -23,6 +24,13 @@
 	}
 
 	onMount(async () => {
+		$isOnline = navigator.onLine;
+		window.addEventListener('online', () => {
+			$isOnline = true;
+		});
+		window.addEventListener('offline', () => {
+			$isOnline = false;
+		});
 		const [countRes, pokedexRes] = await Promise.all([
 			getPokemonsCount(),
 			getPokemonsFromPokedex(data.user.id)

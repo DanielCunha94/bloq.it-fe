@@ -5,6 +5,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import BasePokemonCard from '$lib/components/basePokemonCard.svelte';
 	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
+	import { isOnline } from '$lib/stores/conection';
 
 	export let pokemon: Pokemon;
 
@@ -19,7 +20,8 @@
 	<BasePokemonCard {pokemon} />
 	<Card.Footer class="flex justify-end">
 		{#if !pokemon.captured}
-			<Button variant="ghost" on:click={handleClick}>Add to my pokedex</Button>
+			<Button variant="ghost" disabled={!$isOnline} on:click={handleClick}>Add to my pokedex</Button
+			>
 		{:else}
 			<CheckCircled />
 		{/if}

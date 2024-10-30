@@ -10,6 +10,7 @@
 	import type { FormTextareaEvent } from '$lib/components/ui/textarea';
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
+	import { isOnline } from '$lib/stores/conection';
 
 	export let pokemon: CapturedPokemon;
 
@@ -40,10 +41,12 @@
 <Card.Root class="w-[350px]">
 	<BasePokemonCard {pokemon} />
 	<Card.Footer class="flex-col">
-		<Button aria-label="share" variant="outline" on:click={handleShare}><Share /></Button>
+		<Button aria-label="share" variant="outline" disabled={!$isOnline} on:click={handleShare}>
+			<Share />
+		</Button>
 
 		<div class="flex items-center space-x-2 mt-3">
-			<Checkbox id="terms" bind:checked={pokemon.checked} />
+			<Checkbox id="terms" disabled={!$isOnline} bind:checked={pokemon.checked} />
 			<Label
 				for="terms"
 				class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -53,6 +56,7 @@
 		</div>
 
 		<Textarea
+			disabled={!$isOnline}
 			value={pokemon.note}
 			class="mt-3"
 			placeholder="Add a note here"
@@ -63,7 +67,7 @@
 				class="mt-3"
 				aria-label="share"
 				variant="outline"
-				disabled={!note}
+				disabled={!note || !$isOnline}
 				on:click={handleAddNote}
 			>
 				Add Note

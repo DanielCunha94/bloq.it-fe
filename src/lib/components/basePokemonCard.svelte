@@ -22,6 +22,7 @@
 		src={pokemon.imgUrl}
 		alt={'A pic of ' + pokemon.name}
 		class="w-24 h-24 object-contain mb-2"
+		loading="lazy"
 	/>
 	<Card.Title class="text-lg font-bold text-center capitalize">{pokemon.name}</Card.Title>
 </Card.Header>

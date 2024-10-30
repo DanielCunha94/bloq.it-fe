@@ -21,6 +21,7 @@
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 	import Progress from '$lib/components/ui/progress/progress.svelte';
+	import { isOnline } from '$lib/stores/conection';
 
 	export let data: PageData;
 
@@ -96,7 +97,9 @@
 </script>
 
 <div class="flex justify-end mx-4 mt-3 gap-3">
-	<Button aria-label="delete" variant="destructive" on:click={handleDelete}><Trash /></Button>
+	<Button aria-label="delete" variant="destructive" disabled={!$isOnline} on:click={handleDelete}
+		><Trash /></Button
+	>
 	<Button
 		variant="secondary"
 		on:click={() => {
