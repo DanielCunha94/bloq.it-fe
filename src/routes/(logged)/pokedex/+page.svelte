@@ -11,12 +11,12 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { downloadCSV } from '$lib/utils/csv';
 	import Dowload from 'svelte-radix/Download.svelte';
-	import { myPokemons } from '$lib/stores/pokedex';
+	import { myPokemons, syncPokedexWithServer } from '$lib/stores/pokedex';
 	import Pagination from '$lib/components/pagination.svelte';
 	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
 	import { toast } from 'svelte-sonner';
 	import FilterAndSort from './(components)/filterAndSort.svelte';
-	import type { FilterAndSortOptions, SortDirection } from '$lib/models/common';
+	import type { Filter, FilterAndSortOptions, Sort, SortDirection } from '$lib/models/common';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
@@ -26,10 +26,10 @@
 	export let data: PageData;
 
 	let pokemons: CapturedPokemon[] = [];
-	let perPage = 10;
+	let perPage: number = 10;
 	let page: number = 1;
-	let filter: { key: FilterAndSortOptions; value: string };
-	let sort: { key: FilterAndSortOptions; direction: SortDirection } = {
+	let filter: Filter;
+	let sort: Sort = {
 		key: 'name',
 		direction: 'asc'
 	};
@@ -55,6 +55,7 @@
 			$myPokemons[indexToUpdate].note = note;
 		}
 		$loading = false;
+		syncPokedexWithServer(data.user.id);
 	}
 
 	function filterAndSort(capturedPokemons: CapturedPokemon[]) {
@@ -63,16 +64,16 @@
 			return;
 		}
 
-		let filterAndSorted = [...capturedPokemons];
+		let filteredAndSorted = [...capturedPokemons];
 		if (filter?.key && filter?.value) {
-			filterAndSorted = filterPokemons(filterAndSorted, filter);
+			filteredAndSorted = filterPokemons(filteredAndSorted, filter);
 		}
 
 		if (sort?.key && sort?.direction) {
-			filterAndSorted = sortPokemons(filterAndSorted, sort);
+			filteredAndSorted = sortPokemons(filteredAndSorted, sort);
 		}
 
-		pokemons = [...filterAndSorted];
+		pokemons = [...filteredAndSorted];
 	}
 
 	function onChangeMyPokemons(pokemons: CapturedPokemon[]) {
@@ -81,18 +82,23 @@
 
 	async function handleDelete() {
 		$loading = true;
-		const deleteIds = pokemons.filter((p) => p.checked).map((p) => p.id);
-		if (deleteIds.length) {
-			const res = await deletePokemons(data.user.id, deleteIds);
-			if (res.hasError) {
-				toast.error('Fail to delete pokemons');
-				$loading = false;
-				return;
-			}
-			toast.success(`pokemons deleted`);
-			$myPokemons = $myPokemons.filter((p) => !deleteIds.includes(p.id));
+		const deleteIds = pokemons.filter((p) => p.toDelete).map((p) => p.id);
+		if (!deleteIds.length) {
+			$loading = false;
+			return;
 		}
+
+		const res = await deletePokemons(data.user.id, deleteIds);
+		if (res.hasError) {
+			toast.error('Fail to delete pokemons');
+			$loading = false;
+			return;
+		}
+		toast.success(`pokemons deleted`);
+		$myPokemons = $myPokemons.filter((p) => !deleteIds.includes(p.id));
 		$loading = false;
+
+		syncPokedexWithServer(data.user.id);
 	}
 </script>
 
@@ -151,15 +157,15 @@
 					{#each pokemons.slice((page - 1) * perPage, page * perPage) as pokemon, i (i)}
 						<PokemonCard.default
 							{pokemon}
-							on:addNote={(e) => {
-								handleAddNote(e.detail.note, pokemon);
+							on:addNote={async (e) => {
+								await handleAddNote(e.detail.note, pokemon);
 							}}
 						/>
 					{/each}
 				{/await}
 			{:else}
 				<div class="flex justify-center items-center">
-					<p class="">No pokemons added to pokédex</p>
+					<p>No pokemons added to pokédex</p>
 				</div>
 			{/if}
 		</div>

@@ -7,7 +7,7 @@
 	import type { PageData } from './$types';
 	import { addPokemonToPokedex } from '$lib/services/pokedex';
 	import { toast } from 'svelte-sonner';
-	import { myPokemons } from '$lib/stores/pokedex';
+	import { myPokemons, syncPokedexWithServer } from '$lib/stores/pokedex';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 
@@ -49,6 +49,7 @@
 
 		pokemons = pokemons;
 		$loading = false;
+		syncPokedexWithServer(data.user.id);
 	}
 </script>
 

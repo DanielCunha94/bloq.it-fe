@@ -68,7 +68,7 @@ describe('PokemonsCard', () => {
 		expect(checkbox).not.toBeDisabled();
 
 		await user.click(checkbox);
-		expect(mockPokemon.checked).toBe(true);
+		expect(mockPokemon.toDelete).toBe(true);
 		isOnline.set(false);
 		await tick();
 		expect(checkbox).toBeDisabled();

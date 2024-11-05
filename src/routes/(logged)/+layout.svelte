@@ -13,6 +13,8 @@
 
 	export let data: LayoutData;
 
+	let layoutLoading: boolean = false;
+
 	if (browser) {
 		if ('serviceWorker' in navigator) {
 			addEventListener('load', function () {
@@ -29,6 +31,7 @@
 	});
 
 	async function load() {
+		layoutLoading = true;
 		const [countRes, pokedexRes] = await Promise.all([
 			getPokemonsCount(),
 			getPokemonsFromPokedex(data.user.id)
@@ -41,6 +44,7 @@
 		if (!countRes.hasError) {
 			$pokemonsCount = countRes.totalCount ?? 0;
 		}
+		layoutLoading = false;
 	}
 
 	async function handleOnline() {
@@ -55,5 +59,5 @@
 </script>
 
 <Navbar />
-<Loading loading={$loading} />
+<Loading loading={$loading || layoutLoading} />
 <slot></slot>

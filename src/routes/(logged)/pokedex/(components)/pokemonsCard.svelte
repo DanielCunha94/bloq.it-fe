@@ -52,7 +52,7 @@
 		</Button>
 
 		<div class="flex items-center space-x-2 mt-3">
-			<Checkbox id="terms" disabled={!$isOnline} bind:checked={pokemon.checked} />
+			<Checkbox id="terms" disabled={!$isOnline} bind:checked={pokemon.toDelete} />
 			<Label
 				for="terms"
 				class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

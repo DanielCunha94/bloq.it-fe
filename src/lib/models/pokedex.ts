@@ -1,22 +1,11 @@
 import { formatDate, isSameDay } from '$lib/utils/time';
 import type { FilterAndSortOptions, SortDirection } from './common';
+import type { Pokemon } from './pokemon';
 
-export type CapturedPokemon = {
-	id: string;
-	name: string;
-	height: number;
-	weight: number;
-	health: number | null;
-	speed: number | null;
-	attack: number | null;
-	defense: number | null;
-	specialAttack: number | null;
-	specialDefense: number | null;
-	imgUrl: string | null;
+export type CapturedPokemon = Omit<Pokemon, 'captured'> & {
 	createdAt: Date | string;
 	note: string | null;
-	types: string[];
-	checked?: boolean;
+	toDelete?: boolean;
 };
 
 export function capturedPokemonsToCSV(pokemons: CapturedPokemon[]) {
