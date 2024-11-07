@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Select from '$lib/components/select.svelte';
-	import type { FilterAndSortOptions, SortDirection } from '$lib/models/common';
+	import type { FilterAndSortOptions, SortDirection } from '$lib/types/common';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import ArrowUp from 'svelte-radix/ArrowUp.svelte';
 	import ArrowDown from 'svelte-radix/ArrowDown.svelte';

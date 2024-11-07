@@ -1,3 +1,3 @@
 import { writable, type Writable } from 'svelte/store';
 
-export const pokemonsCount: Writable<number> = writable(0);
+export const pokemonsCount: Writable<number> = writable(1000);

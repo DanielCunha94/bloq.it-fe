@@ -1,6 +1,7 @@
-import { externalPokemonToPokemon, type Pokemon } from '$lib/models/pokemon';
+import type { Pokemon } from '$lib/types/pokemon';
+import { externalPokemonToPokemon } from '$lib/useCases/pokemon';
+import { newErrorToast } from '$lib/utils/toast';
 import { Pokedex } from 'pokeapi-js-wrapper';
-import { toast } from 'svelte-sonner';
 
 const pokemonAPI = new Pokedex({
 	cache: false
@@ -16,7 +17,7 @@ export async function getPokemonsList(
 		const pokemons = (await Promise.all(promises)).map((p) => externalPokemonToPokemon(p));
 		return { pokemons, hasError: false };
 	} catch {
-		toast.error('failed to load Pokémon list');
+		newErrorToast('failed to load Pokémon list');
 		return { pokemons: [], hasError: true };
 	}
 }
@@ -26,7 +27,7 @@ export async function getPokemonsCount() {
 		const { count } = await pokemonAPI.getPokemonsList({ offset: 1, limit: 1 });
 		return { totalCount: count, hasError: false };
 	} catch {
-		toast.error('failed to load Pokémon count ');
+		newErrorToast('failed to load Pokémon count ');
 		return { totalCount: 0, hasError: true };
 	}
 }

@@ -10,6 +10,7 @@
 	import { getPokemonsCount } from '$lib/services/pokemon';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 	import { isOnline } from '$lib/stores/conection';
+	import { userId } from '$lib/stores/user';
 
 	export let data: LayoutData;
 
@@ -26,6 +27,7 @@
 	}
 
 	onMount(async () => {
+		$userId = data.user.id;
 		handleOnline();
 		load();
 	});
@@ -37,13 +39,13 @@
 			getPokemonsFromPokedex(data.user.id)
 		]);
 
+		if (!countRes.hasError) {
+			$pokemonsCount = countRes.totalCount ?? 0;
+		}
 		if (!pokedexRes.hasError) {
 			$myPokemons = pokedexRes.data ?? [];
 		}
 
-		if (!countRes.hasError) {
-			$pokemonsCount = countRes.totalCount ?? 0;
-		}
 		layoutLoading = false;
 	}
 

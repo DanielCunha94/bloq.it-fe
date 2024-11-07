@@ -1,29 +1,25 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import type { PageData } from './$types';
-	import { addNoteToPokemon, deletePokemons } from '$lib/services/pokedex';
 	import {
+		addNoteToMyPokemon,
 		capturedPokemonsToCSV,
-		filterPokemons,
-		sortPokemons,
-		type CapturedPokemon
-	} from '$lib/models/pokedex';
+		deletePokemonsFromPokedex,
+		filterAndSortPokemons
+	} from '$lib/useCases/pokedex';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { downloadCSV } from '$lib/utils/csv';
 	import Dowload from 'svelte-radix/Download.svelte';
-	import { myPokemons, syncPokedexWithServer } from '$lib/stores/pokedex';
+	import { myPokemons } from '$lib/stores/pokedex';
 	import Pagination from '$lib/components/pagination.svelte';
 	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
-	import { toast } from 'svelte-sonner';
 	import FilterAndSort from './(components)/filterAndSort.svelte';
-	import type { Filter, FilterAndSortOptions, Sort, SortDirection } from '$lib/models/common';
+	import type { Filter, Sort } from '$lib/types/common';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 	import Progress from '$lib/components/ui/progress/progress.svelte';
 	import { isOnline } from '$lib/stores/conection';
-
-	export let data: PageData;
+	import type { CapturedPokemon } from '$lib/types/pokemon';
 
 	let pokemons: CapturedPokemon[] = [];
 	let perPage: number = 10;
@@ -35,70 +31,29 @@
 	};
 
 	$: onChangeMyPokemons($myPokemons);
+	$: paginatedPokemons = pokemons.slice((page - 1) * perPage, page * perPage);
 
 	function handleCSV() {
 		downloadCSV(capturedPokemonsToCSV(pokemons), 'My_Pokemons.csv');
 	}
 
 	async function handleAddNote(note: string, pokemon: CapturedPokemon) {
-		$loading = true;
-		const res = await addNoteToPokemon(data.user.id, pokemon.id, note);
-		if (res.hasError) {
-			toast.error('Fail to add note');
-			$loading = false;
-			return;
-		}
-		toast.success(`Note added to ${pokemon.name}`);
-
-		const indexToUpdate = $myPokemons.findIndex((p) => p.id === pokemon.id);
-		if (indexToUpdate != -1) {
-			$myPokemons[indexToUpdate].note = note;
-		}
-		$loading = false;
-		syncPokedexWithServer(data.user.id);
+		addNoteToMyPokemon(note, pokemon);
 	}
 
-	function filterAndSort(capturedPokemons: CapturedPokemon[]) {
-		if (capturedPokemons.length === 0) {
-			pokemons = [];
-			return;
-		}
-
-		let filteredAndSorted = [...capturedPokemons];
-		if (filter?.key && filter?.value) {
-			filteredAndSorted = filterPokemons(filteredAndSorted, filter);
-		}
-
-		if (sort?.key && sort?.direction) {
-			filteredAndSorted = sortPokemons(filteredAndSorted, sort);
-		}
-
-		pokemons = [...filteredAndSorted];
+	function handleFilterAndSort() {
+		pokemons = filterAndSortPokemons(filter, sort);
 	}
 
-	function onChangeMyPokemons(pokemons: CapturedPokemon[]) {
-		filterAndSort(pokemons);
+	function onChangeMyPokemons(capturedPokemons: CapturedPokemon[]) {
+		pokemons = [];
+		if (capturedPokemons) {
+			handleFilterAndSort();
+		}
 	}
 
 	async function handleDelete() {
-		$loading = true;
-		const deleteIds = pokemons.filter((p) => p.toDelete).map((p) => p.id);
-		if (!deleteIds.length) {
-			$loading = false;
-			return;
-		}
-
-		const res = await deletePokemons(data.user.id, deleteIds);
-		if (res.hasError) {
-			toast.error('Fail to delete pokemons');
-			$loading = false;
-			return;
-		}
-		toast.success(`pokemons deleted`);
-		$myPokemons = $myPokemons.filter((p) => !deleteIds.includes(p.id));
-		$loading = false;
-
-		syncPokedexWithServer(data.user.id);
+		await deletePokemonsFromPokedex(pokemons);
 	}
 </script>
 
@@ -120,11 +75,11 @@
 <FilterAndSort
 	on:filter={(e) => {
 		filter = { key: e.detail.key, value: e.detail.value };
-		filterAndSort($myPokemons);
+		handleFilterAndSort();
 	}}
 	on:sort={(e) => {
 		sort = { key: e.detail.key, direction: e.detail.direction };
-		filterAndSort($myPokemons);
+		handleFilterAndSort();
 	}}
 />
 
@@ -154,7 +109,7 @@
 		<div class="flex flex-wrap gap-4 justify-center mt-5">
 			{#if $myPokemons?.length}
 				{#await import('./(components)/pokemonsCard.svelte') then PokemonCard}
-					{#each pokemons.slice((page - 1) * perPage, page * perPage) as pokemon, i (i)}
+					{#each paginatedPokemons as pokemon, i (i)}
 						<PokemonCard.default
 							{pokemon}
 							on:addNote={async (e) => {

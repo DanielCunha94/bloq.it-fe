@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index.js';
-	import type { CapturedPokemon } from '$lib/models/pokedex';
-	import type { Pokemon } from '$lib/models/pokemon';
+	import type { CapturedPokemon, Pokemon } from '$lib/types/pokemon';
 
 	export let pokemons: Pokemon[] | CapturedPokemon[] = [];
 </script>

@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { isOnline } from '$lib/stores/conection';
 import { describe, expect, it, vi } from 'vitest';
-import type { Pokemon } from '$lib/models/pokemon';
 import PokemonCard from './pokemonCard.svelte';
+import type { Pokemon } from '$lib/types/pokemon';
 
 describe('PokemonCard', () => {
 	const mockPokemon: Pokemon = {

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import type { CapturedPokemon } from '$lib/models/pokedex';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { share } from '$lib/utils/share';
 	import Share from 'svelte-radix/Share1.svelte';
@@ -11,6 +10,7 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { isOnline } from '$lib/stores/conection';
+	import type { CapturedPokemon } from '$lib/types/pokemon';
 
 	export let pokemon: CapturedPokemon;
 
@@ -19,10 +19,9 @@
 	const dispatch = createEventDispatcher<{ addNote: { note: string } }>();
 
 	function handleShare() {
-		const text = `${pokemon.name} (HP: ${pokemon.health}, Height: ${pokemon.height}, Weight: ${pokemon.weight})`;
 		share({
 			title: `Check out my ${pokemon.name}!`,
-			text,
+			text: `${pokemon.name} (HP: ${pokemon.health}, Height: ${pokemon.height}, Weight: ${pokemon.weight})`,
 			url: pokemon.imgUrl ? pokemon.imgUrl : undefined
 		});
 	}

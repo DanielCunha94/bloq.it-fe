@@ -1,11 +1,11 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
-	import type { Pokemon } from '$lib/models/pokemon';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import BasePokemonCard from '$lib/components/basePokemonCard.svelte';
 	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
 	import { isOnline } from '$lib/stores/conection';
+	import type { Pokemon } from '$lib/types/pokemon';
 
 	export let pokemon: Pokemon;
 
