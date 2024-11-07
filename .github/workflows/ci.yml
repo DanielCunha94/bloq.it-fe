@@ -21,6 +21,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - name: Set up environment variables
+        run: echo "PUBLIC_BASE_URL=${{ secrets.CI_PUBLIC_BASE_URL }}" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: npm install
 
