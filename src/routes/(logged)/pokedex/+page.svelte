@@ -22,7 +22,7 @@
 	import { deleteFromPokedex } from '$lib/useCases/pokedex/deleteFromPokedex';
 	import { onDestroy, tick } from 'svelte';
 
-	let debounceTimeout: NodeJS.Timeout | null = null;
+	let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 	let pokemons: CapturedPokemon[] = [];
 	let perPage: number = 10;
 	let page: number = 1;
