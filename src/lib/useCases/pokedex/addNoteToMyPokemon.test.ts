@@ -9,7 +9,7 @@ import { myPokemons, syncPokedexWithServer } from '$lib/stores/pokedex';
 vi.mock('svelte/store', () => ({ get: vi.fn(), writable: vi.fn() }));
 
 vi.mock('$lib/services/pokedex', () => ({
-	addNoteToPokemon: vi.fn(),
+	addNoteToPokemon: vi.fn()
 }));
 vi.mock('$lib/stores/loading', () => ({
 	loading: { set: vi.fn() }

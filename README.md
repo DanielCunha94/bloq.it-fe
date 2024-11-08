@@ -55,7 +55,6 @@
 
 - **[PokéAPI](https://pokeapi.co/)**
 
-
 ## Getting Started
 
 ### Prerequisites
@@ -93,10 +92,9 @@
    ```
 
 6. **Run**:
+
    ```bash
    npm run test
    ```
-
-
 
    _Cunha 2024_
