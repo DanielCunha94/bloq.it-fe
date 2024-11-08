@@ -1,5 +1,4 @@
-import type { Pokemon } from '$lib/types/pokemon';
-import { externalPokemonToPokemon } from '$lib/useCases/pokemon';
+import { externalPokemonToPokemon, type Pokemon } from '$lib/models/pokemon';
 import { newErrorToast } from '$lib/utils/toast';
 import { Pokedex } from 'pokeapi-js-wrapper';
 

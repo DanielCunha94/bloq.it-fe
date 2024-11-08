@@ -1,11 +1,5 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import {
-		addNoteToMyPokemon,
-		capturedPokemonsToCSV,
-		deletePokemonsFromPokedex,
-		filterAndSortPokemons
-	} from '$lib/useCases/pokedex';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { downloadCSV } from '$lib/utils/csv';
 	import Dowload from 'svelte-radix/Download.svelte';
@@ -13,13 +7,19 @@
 	import Pagination from '$lib/components/pagination.svelte';
 	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
 	import FilterAndSort from './(components)/filterAndSort.svelte';
-	import type { Filter, Sort } from '$lib/types/common';
+	import type { Filter, Sort } from '$lib/models/common';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 	import Progress from '$lib/components/ui/progress/progress.svelte';
 	import { isOnline } from '$lib/stores/conection';
-	import type { CapturedPokemon } from '$lib/types/pokemon';
+	import {
+		capturedPokemonsToCSV,
+		filterAndSortPokemons,
+		type CapturedPokemon
+	} from '$lib/models/pokedex';
+	import { addNoteToMyPokemon } from '$lib/useCases/pokedex/addNoteToMyPokemon';
+	import { deleteFromPokedex } from '$lib/useCases/pokedex/deleteFromPokedex';
 
 	let pokemons: CapturedPokemon[] = [];
 	let perPage: number = 10;
@@ -53,7 +53,7 @@
 	}
 
 	async function handleDelete() {
-		await deletePokemonsFromPokedex(pokemons);
+		await deleteFromPokedex(pokemons);
 	}
 </script>
 

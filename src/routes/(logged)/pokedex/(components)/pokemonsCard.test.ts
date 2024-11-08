@@ -5,7 +5,8 @@ import { share } from '$lib/utils/share';
 import { tick } from 'svelte';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import PokemonsCard from './pokemonsCard.svelte';
-import type { CapturedPokemon } from '$lib/types/pokemon';
+import type { CapturedPokemon } from '$lib/models/pokedex';
+
 
 vi.mock('$lib/utils/share');
 

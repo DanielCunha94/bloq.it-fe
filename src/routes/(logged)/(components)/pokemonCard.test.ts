@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { isOnline } from '$lib/stores/conection';
 import { describe, expect, it, vi } from 'vitest';
 import PokemonCard from './pokemonCard.svelte';
-import type { Pokemon } from '$lib/types/pokemon';
+import type { Pokemon } from '$lib/models/pokemon';
 
 describe('PokemonCard', () => {
 	const mockPokemon: Pokemon = {

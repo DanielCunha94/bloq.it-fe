@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
-	import type { CapturedPokemon, Pokemon } from '$lib/types/pokemon';
+	import type { CapturedPokemon } from '$lib/models/pokedex';
+	import type { Pokemon } from '$lib/models/pokemon';
 	import { formatDate } from '$lib/utils/time';
 	import Badge from './ui/badge/badge.svelte';
 	import { Progress } from './ui/progress';

@@ -1,6 +1,7 @@
 import HttpClient from '$lib/utils/http';
 import { PUBLIC_BASE_URL } from '$env/static/public';
-import type { CapturedPokemon, Pokemon } from '$lib/types/pokemon';
+import type {Pokemon } from '$lib/models/pokemon';
+import type { CapturedPokemon } from '$lib/models/pokedex';
 
 export const api = new HttpClient(PUBLIC_BASE_URL);
 

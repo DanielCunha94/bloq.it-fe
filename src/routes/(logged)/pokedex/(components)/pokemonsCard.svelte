@@ -10,7 +10,7 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { isOnline } from '$lib/stores/conection';
-	import type { CapturedPokemon } from '$lib/types/pokemon';
+	import type { CapturedPokemon } from '$lib/models/pokedex';
 
 	export let pokemon: CapturedPokemon;
 

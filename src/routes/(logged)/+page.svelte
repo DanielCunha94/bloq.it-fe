@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { getPokemons } from '$lib/useCases/pokemon';
 	import Pagination from '$lib/components/pagination.svelte';
 	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
-	import { addToPokedex } from '$lib/useCases/pokedex';
-	import type { Pokemon } from '$lib/types/pokemon';
+	import type { Pokemon } from '$lib/models/pokemon';
+	import { getPokemons } from '$lib/useCases/pokemon/getPokemons';
+	import { addToPokedex } from '$lib/useCases/pokedex/addToPokedex';
 
 	let pokemons: Pokemon[] = [];
 	let perPage: number = 10;

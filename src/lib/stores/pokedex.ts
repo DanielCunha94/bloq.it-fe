@@ -1,5 +1,5 @@
+import type { CapturedPokemon } from '$lib/models/pokedex';
 import { getPokemonsFromPokedex } from '$lib/services/pokedex';
-import type { CapturedPokemon } from '$lib/types/pokemon';
 import { writable, type Writable } from 'svelte/store';
 
 export const myPokemons: Writable<CapturedPokemon[]> = writable([]);

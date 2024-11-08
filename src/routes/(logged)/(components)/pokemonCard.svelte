@@ -5,7 +5,7 @@
 	import BasePokemonCard from '$lib/components/basePokemonCard.svelte';
 	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
 	import { isOnline } from '$lib/stores/conection';
-	import type { Pokemon } from '$lib/types/pokemon';
+	import type { Pokemon } from '$lib/models/pokemon';
 
 	export let pokemon: Pokemon;
 

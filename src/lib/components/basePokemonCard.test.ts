@@ -2,7 +2,7 @@ import { render } from '@testing-library/svelte';
 import PokemonCard from './basePokemonCard.svelte';
 import { describe, expect, it } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import type { CapturedPokemon } from '$lib/types/pokemon';
+import type { CapturedPokemon } from '$lib/models/pokedex';
 
 const mockedPokemon: CapturedPokemon = {
 	id: '1',

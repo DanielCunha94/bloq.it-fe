@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/svelte';
 import PokemonsTable from './pokemonsTable.svelte';
 import { describe, expect, it } from 'vitest';
-import type { Pokemon } from '$lib/types/pokemon';
+import type { Pokemon } from '$lib/models/pokemon';
 
 describe('PokemonTable', () => {
 	const mockPokemons: Pokemon[] = [

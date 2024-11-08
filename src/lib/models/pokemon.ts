@@ -1,9 +1,32 @@
 import { type Pokemon as ExternalPokemon } from 'pokeapi-js-wrapper';
-import { stats, type CapturedPokemon, type Pokemon, type Stat } from '$lib/types/pokemon';
-import { loading } from '$lib/stores/loading';
-import { get } from 'svelte/store';
-import { myPokemons } from '$lib/stores/pokedex';
-import { getPokemonsList } from '$lib/services/pokemon';
+import type { CapturedPokemon } from '$lib/models/pokedex';
+
+export type Pokemon = {
+	id: string;
+	name: string;
+	height: number;
+	weight: number;
+	health: number | null;
+	speed: number | null;
+	attack: number | null;
+	defense: number | null;
+	specialAttack: number | null;
+	specialDefense: number | null;
+	imgUrl: string | null;
+	types: string[];
+	captured?: boolean;
+};
+
+export const stats = {
+	hp: 'health',
+	attack: 'attack',
+	defense: 'defense',
+	'special-attack': 'specialAttack',
+	'special-defense': 'specialDefense',
+	speed: 'speed'
+} as const;
+
+export type Stat = keyof typeof stats;
 
 function _isValidStat(stat: string): stat is Stat {
 	return stat in stats;
@@ -51,14 +74,5 @@ export function setCapturedPokemons(pokemons: Pokemon[], capturedPokemons: Captu
 	pokemons.forEach((pokemon) => {
 		pokemon.captured = capturedIds.has(pokemon.id) || false;
 	});
-	return pokemons;
-}
-
-export async function getPokemons(page: number, perPage: number) {
-	loading.set(true);
-	const { pokemons } = await getPokemonsList(perPage * (page - 1), perPage);
-	setCapturedPokemons(pokemons, get(myPokemons));
-
-	loading.set(false);
 	return pokemons;
 }
