@@ -11,6 +11,7 @@
 	import { pokemonsCount } from '$lib/stores/pokemon';
 	import { isOnline } from '$lib/stores/conection';
 	import { userId } from '$lib/stores/user';
+	import { newErrorToast, newSuccessToast } from '$lib/utils/toast';
 
 	export let data: LayoutData;
 
@@ -53,9 +54,11 @@
 		$isOnline = navigator.onLine;
 		window.addEventListener('online', () => {
 			$isOnline = true;
+			newSuccessToast('Your connection was restored');
 		});
 		window.addEventListener('offline', () => {
 			$isOnline = false;
+			newErrorToast('No connection available, limited functionality');
 		});
 	}
 </script>
