@@ -20,7 +20,9 @@
 	} from '$lib/models/pokedex';
 	import { addNoteToMyPokemon } from '$lib/useCases/pokedex/addNoteToMyPokemon';
 	import { deleteFromPokedex } from '$lib/useCases/pokedex/deleteFromPokedex';
+	import { onDestroy, tick } from 'svelte';
 
+	let debounceTimeout: NodeJS.Timeout | null = null;
 	let pokemons: CapturedPokemon[] = [];
 	let perPage: number = 10;
 	let page: number = 1;
@@ -33,12 +35,16 @@
 	$: onChangeMyPokemons($myPokemons);
 	$: paginatedPokemons = pokemons.slice((page - 1) * perPage, page * perPage);
 
+	onDestroy(() => {
+		if (debounceTimeout) clearTimeout(debounceTimeout);
+	});
+
 	function handleCSV() {
 		downloadCSV(capturedPokemonsToCSV(pokemons), 'My_Pokemons.csv');
 	}
 
 	async function handleAddNote(note: string, pokemon: CapturedPokemon) {
-		addNoteToMyPokemon(note, pokemon);
+		await addNoteToMyPokemon(note, pokemon);
 	}
 
 	function handleFilterAndSort() {
@@ -54,6 +60,14 @@
 
 	async function handleDelete() {
 		await deleteFromPokedex(pokemons);
+	}
+
+	function debounce(func: () => void, delay = 300) {
+		if (debounceTimeout) clearTimeout(debounceTimeout);
+		debounceTimeout = setTimeout(async () => {
+			await tick();
+			func();
+		}, delay);
 	}
 </script>
 
@@ -75,11 +89,11 @@
 <FilterAndSort
 	on:filter={(e) => {
 		filter = { key: e.detail.key, value: e.detail.value };
-		handleFilterAndSort();
+		debounce(handleFilterAndSort);
 	}}
 	on:sort={(e) => {
 		sort = { key: e.detail.key, direction: e.detail.direction };
-		handleFilterAndSort();
+		debounce(handleFilterAndSort);
 	}}
 />
 

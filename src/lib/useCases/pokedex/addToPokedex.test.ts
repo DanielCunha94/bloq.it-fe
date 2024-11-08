@@ -38,7 +38,7 @@ describe('addToPokedex', () => {
 		defense: 49,
 		specialAttack: 65,
 		specialDefense: 65,
-		imgUrl: 'http://example.com/bulbasaur.png',
+		imgUrl: 'imgUrl',
 		types: ['Grass', 'Poison']
 	};
 
@@ -54,7 +54,7 @@ describe('addToPokedex', () => {
 			defense: 49,
 			specialAttack: 65,
 			specialDefense: 65,
-			imgUrl: 'http://example.com/bulbasaur.png',
+			imgUrl: 'imgUrl',
 			types: ['Grass', 'Poison'],
 			captured: false
 		},
