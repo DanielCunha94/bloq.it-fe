@@ -4,8 +4,8 @@ import { isOnline } from '$lib/stores/conection';
 import { share } from '$lib/utils/share';
 import { tick } from 'svelte';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { CapturedPokemon } from '$lib/models/pokedex';
 import PokemonsCard from './pokemonsCard.svelte';
+import type { CapturedPokemon } from '$lib/models/pokedex';
 
 vi.mock('$lib/utils/share');
 
@@ -68,7 +68,7 @@ describe('PokemonsCard', () => {
 		expect(checkbox).not.toBeDisabled();
 
 		await user.click(checkbox);
-		expect(mockPokemon.checked).toBe(true);
+		expect(mockPokemon.toDelete).toBe(true);
 		isOnline.set(false);
 		await tick();
 		expect(checkbox).toBeDisabled();

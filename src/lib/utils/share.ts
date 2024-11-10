@@ -1,4 +1,4 @@
-import { toast } from 'svelte-sonner';
+import { newErrorToast } from './toast';
 
 export async function share(shareObject: { title: string; text: string; url?: string }) {
 	try {
@@ -7,7 +7,9 @@ export async function share(shareObject: { title: string; text: string; url?: st
 		} else {
 			await navigator.clipboard.writeText(shareObject.text);
 		}
-	} catch {
-		toast.error('share fail');
+	} catch (e) {
+		if (e != 'AbortError: Share canceled') {
+			newErrorToast('share fail');
+		}
 	}
 }

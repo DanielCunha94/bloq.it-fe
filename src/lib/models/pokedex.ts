@@ -1,22 +1,13 @@
+import { myPokemons } from '$lib/stores/pokedex';
 import { formatDate, isSameDay } from '$lib/utils/time';
-import type { FilterAndSortOptions, SortDirection } from './common';
+import { get } from 'svelte/store';
+import type { Filter, FilterAndSortOptions, Sort, SortDirection } from './common';
+import type { Pokemon } from './pokemon';
 
-export type CapturedPokemon = {
-	id: string;
-	name: string;
-	height: number;
-	weight: number;
-	health: number | null;
-	speed: number | null;
-	attack: number | null;
-	defense: number | null;
-	specialAttack: number | null;
-	specialDefense: number | null;
-	imgUrl: string | null;
+export type CapturedPokemon = Omit<Pokemon, 'captured'> & {
 	createdAt: Date | string;
 	note: string | null;
-	types: string[];
-	checked?: boolean;
+	toDelete?: boolean;
 };
 
 export function capturedPokemonsToCSV(pokemons: CapturedPokemon[]) {
@@ -62,26 +53,20 @@ export function filterPokemons(
 ): CapturedPokemon[] {
 	const { key, value } = options;
 
-	if (key === 'name') {
-		return pokemons.filter((pokemon) => pokemon.name.toLowerCase().includes(value.toLowerCase()));
+	switch (key) {
+		case 'name':
+			return pokemons.filter((pokemon) => pokemon.name.toLowerCase().includes(value.toLowerCase()));
+		case 'height':
+			return pokemons.filter((pokemon) => pokemon.height === parseFloat(value));
+		case 'type':
+			return pokemons.filter((pokemon) =>
+				pokemon.types.some((type) => type.toLowerCase().includes(value.toLowerCase()))
+			);
+		case 'createdAt':
+			return pokemons.filter((pokemon) => isSameDay(pokemon.createdAt, value));
+		default:
+			return pokemons;
 	}
-
-	if (key === 'height') {
-		const heightValue = parseFloat(value);
-		return pokemons.filter((pokemon) => pokemon.height === heightValue);
-	}
-
-	if (key === 'type') {
-		return pokemons.filter((pokemon) =>
-			pokemon.types.some((type) => type.toLowerCase().includes(value.toLowerCase()))
-		);
-	}
-
-	if (key === 'createdAt') {
-		return pokemons.filter((pokemon) => isSameDay(pokemon.createdAt, value));
-	}
-
-	return pokemons;
 }
 
 export function sortPokemons(
@@ -89,26 +74,42 @@ export function sortPokemons(
 	options: { key: FilterAndSortOptions; direction: SortDirection }
 ): CapturedPokemon[] {
 	const { key, direction } = options;
+	switch (key) {
+		case 'name':
+			return pokemons.toSorted((a, b) => {
+				const comparison = a.name.localeCompare(b.name);
+				return direction === 'asc' ? comparison : -comparison;
+			});
+		case 'height':
+			return pokemons.toSorted((a, b) => {
+				const comparison = a.height - b.height;
+				return direction === 'asc' ? comparison : -comparison;
+			});
 
-	if (key === 'name') {
-		return pokemons.toSorted((a, b) => {
-			const comparison = a.name.localeCompare(b.name);
-			return direction === 'asc' ? comparison : -comparison;
-		});
+		case 'createdAt':
+			return pokemons.toSorted((a, b) => {
+				const comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+				return direction === 'asc' ? comparison : -comparison;
+			});
+		default:
+			return pokemons;
+	}
+}
+
+export function filterAndSortPokemons(filter: Filter, sort: Sort) {
+	const capturedPokemons = get(myPokemons);
+	if (capturedPokemons.length === 0) {
+		return [];
 	}
 
-	if (key === 'height') {
-		return pokemons.toSorted((a, b) => {
-			const comparison = a.height - b.height;
-			return direction === 'asc' ? comparison : -comparison;
-		});
+	let filteredAndSortedPokemons = capturedPokemons;
+	if (filter?.key && filter?.value) {
+		filteredAndSortedPokemons = filterPokemons(filteredAndSortedPokemons, filter);
 	}
 
-	if (key === 'createdAt') {
-		return pokemons.toSorted((a, b) => {
-			const comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-			return direction === 'asc' ? comparison : -comparison;
-		});
+	if (sort?.key && sort?.direction) {
+		filteredAndSortedPokemons = sortPokemons(filteredAndSortedPokemons, sort);
 	}
-	return pokemons;
+
+	return filteredAndSortedPokemons;
 }

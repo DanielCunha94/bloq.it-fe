@@ -1,8 +1,8 @@
 import { json, redirect, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { capturedPokemon } from '$lib/server/db/schema';
-import type { Pokemon } from '$lib/models/pokemon';
 import { eq, inArray } from 'drizzle-orm';
+import type { Pokemon } from '$lib/models/pokemon';
 import type { CapturedPokemon } from '$lib/models/pokedex';
 
 type Params = {

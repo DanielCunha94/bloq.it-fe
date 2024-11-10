@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { capturedPokemonsToCSV, filterPokemons, type CapturedPokemon } from './pokedex';
+import { capturedPokemonsToCSV, filterPokemons, type CapturedPokemon } from '$lib/models/pokedex';
 
 describe('capturedPokemonsToCSV', () => {
 	it('should return an empty string when given an empty array', () => {

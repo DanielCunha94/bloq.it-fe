@@ -10,8 +10,12 @@
 	import { getPokemonsCount } from '$lib/services/pokemon';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 	import { isOnline } from '$lib/stores/conection';
+	import { userId } from '$lib/stores/user';
+	import { newErrorToast, newSuccessToast } from '$lib/utils/toast';
 
 	export let data: LayoutData;
+
+	let layoutLoading: boolean = false;
 
 	if (browser) {
 		if ('serviceWorker' in navigator) {
@@ -24,36 +28,41 @@
 	}
 
 	onMount(async () => {
+		$userId = data.user.id;
 		handleOnline();
 		load();
 	});
 
 	async function load() {
+		layoutLoading = true;
 		const [countRes, pokedexRes] = await Promise.all([
 			getPokemonsCount(),
 			getPokemonsFromPokedex(data.user.id)
 		]);
 
+		if (!countRes.hasError) {
+			$pokemonsCount = countRes.totalCount ?? 0;
+		}
 		if (!pokedexRes.hasError) {
 			$myPokemons = pokedexRes.data ?? [];
 		}
 
-		if (!countRes.hasError) {
-			$pokemonsCount = countRes.totalCount ?? 0;
-		}
+		layoutLoading = false;
 	}
 
 	async function handleOnline() {
 		$isOnline = navigator.onLine;
 		window.addEventListener('online', () => {
 			$isOnline = true;
+			newSuccessToast('Your connection was restored');
 		});
 		window.addEventListener('offline', () => {
 			$isOnline = false;
+			newErrorToast('No connection available, limited functionality');
 		});
 	}
 </script>
 
 <Navbar />
-<Loading loading={$loading} />
+<Loading loading={$loading || layoutLoading} />
 <slot></slot>

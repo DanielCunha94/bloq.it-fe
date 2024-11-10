@@ -1,5 +1,5 @@
 import { type Pokemon as ExternalPokemon } from 'pokeapi-js-wrapper';
-import type { CapturedPokemon } from './pokedex';
+import type { CapturedPokemon } from '$lib/models/pokedex';
 
 export type Pokemon = {
 	id: string;
@@ -17,7 +17,7 @@ export type Pokemon = {
 	captured?: boolean;
 };
 
-const stats = {
+export const stats = {
 	hp: 'health',
 	attack: 'attack',
 	defense: 'defense',
@@ -26,9 +26,9 @@ const stats = {
 	speed: 'speed'
 } as const;
 
-type Stat = keyof typeof stats;
+export type Stat = keyof typeof stats;
 
-function isValidStat(stat: string): stat is Stat {
+function _isValidStat(stat: string): stat is Stat {
 	return stat in stats;
 }
 
@@ -47,21 +47,21 @@ export function externalPokemonToPokemon(externalPokemon: ExternalPokemon): Poke
 		imgUrl: externalPokemon.sprites.front_default,
 		types: []
 	};
-	mapStats(externalPokemon, pokemon);
-	mapTypes(externalPokemon, pokemon);
+	_mapStats(externalPokemon, pokemon);
+	_mapTypes(externalPokemon, pokemon);
 	return pokemon;
 }
 
-function mapStats(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
+function _mapStats(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
 	externalPokemon.stats.forEach((stat) => {
 		const statName = stat.stat.name;
-		if (isValidStat(statName) && stats[statName]) {
+		if (_isValidStat(statName) && stats[statName]) {
 			pokemon[stats[statName]] = stat.base_stat;
 		}
 	});
 }
 
-function mapTypes(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
+function _mapTypes(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
 	const types: string[] = [];
 	externalPokemon.types.forEach((type) => {
 		types.push(type.type.name);
@@ -70,9 +70,9 @@ function mapTypes(externalPokemon: ExternalPokemon, pokemon: Pokemon) {
 }
 
 export function setCapturedPokemons(pokemons: Pokemon[], capturedPokemons: CapturedPokemon[]) {
-	const capturedIds = new Set(capturedPokemons.map((captured) => captured.id));
-
+	const capturedIds = new Set(capturedPokemons?.map((captured) => captured.id));
 	pokemons.forEach((pokemon) => {
 		pokemon.captured = capturedIds.has(pokemon.id) || false;
 	});
+	return pokemons;
 }

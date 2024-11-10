@@ -1,17 +1,12 @@
 <script lang="ts">
-	import { getPokemonsList } from '$lib/services/pokemon';
-	import { setCapturedPokemons, type Pokemon } from '$lib/models/pokemon';
 	import Pagination from '$lib/components/pagination.svelte';
 	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import type { PageData } from './$types';
-	import { addPokemonToPokedex } from '$lib/services/pokedex';
-	import { toast } from 'svelte-sonner';
-	import { myPokemons } from '$lib/stores/pokedex';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
-
-	export let data: PageData;
+	import type { Pokemon } from '$lib/models/pokemon';
+	import { getPokemons } from '$lib/useCases/pokemon/getPokemons';
+	import { addToPokedex } from '$lib/useCases/pokedex/addToPokedex';
 
 	let pokemons: Pokemon[] = [];
 	let perPage: number = 10;
@@ -20,35 +15,12 @@
 	$: loadPokemons(page);
 
 	async function loadPokemons(page: number) {
-		$loading = true;
-		({ pokemons } = await getPokemonsList(perPage * (page - 1), perPage));
-		setCapturedPokemons(pokemons, $myPokemons);
-		pokemons = pokemons;
-		$loading = false;
+		pokemons = await getPokemons(page, perPage);
 	}
 
 	async function handleAddToPokedex(pokemon: Pokemon) {
-		$loading = true;
-		const res = await addPokemonToPokedex(data.user.id, pokemon);
-		if (res.hasError) {
-			toast.error('Fail to add to pokedex');
-			$loading = false;
-			return;
-		}
-		toast.success(`${pokemon.name} add to pokedex`);
-
-		$myPokemons = [
-			...$myPokemons,
-			{
-				...pokemon,
-				note: null,
-				createdAt: new Date().toISOString()
-			}
-		];
-		setCapturedPokemons(pokemons, $myPokemons);
-
+		pokemons = await addToPokedex(pokemons, pokemon);
 		pokemons = pokemons;
-		$loading = false;
 	}
 </script>
 
@@ -71,8 +43,8 @@
 				{#each pokemons as pokemon, i (i)}
 					<PokemonCard.default
 						{pokemon}
-						on:addToPokedex={() => {
-							handleAddToPokedex(pokemon);
+						on:addToPokedex={async () => {
+							await handleAddToPokedex(pokemon);
 						}}
 					/>
 				{/each}

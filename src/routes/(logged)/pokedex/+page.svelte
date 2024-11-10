@@ -1,98 +1,73 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import type { PageData } from './$types';
-	import { addNoteToPokemon, deletePokemons } from '$lib/services/pokedex';
-	import {
-		capturedPokemonsToCSV,
-		filterPokemons,
-		sortPokemons,
-		type CapturedPokemon
-	} from '$lib/models/pokedex';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { downloadCSV } from '$lib/utils/csv';
 	import Dowload from 'svelte-radix/Download.svelte';
 	import { myPokemons } from '$lib/stores/pokedex';
 	import Pagination from '$lib/components/pagination.svelte';
 	import PokemonsTable from '$lib/components/pokemonsTable.svelte';
-	import { toast } from 'svelte-sonner';
 	import FilterAndSort from './(components)/filterAndSort.svelte';
-	import type { FilterAndSortOptions, SortDirection } from '$lib/models/common';
+	import type { Filter, Sort } from '$lib/models/common';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import { loading } from '$lib/stores/loading';
 	import { pokemonsCount } from '$lib/stores/pokemon';
 	import Progress from '$lib/components/ui/progress/progress.svelte';
 	import { isOnline } from '$lib/stores/conection';
+	import {
+		capturedPokemonsToCSV,
+		filterAndSortPokemons,
+		type CapturedPokemon
+	} from '$lib/models/pokedex';
+	import { addNoteToMyPokemon } from '$lib/useCases/pokedex/addNoteToMyPokemon';
+	import { deleteFromPokedex } from '$lib/useCases/pokedex/deleteFromPokedex';
+	import { onDestroy, tick } from 'svelte';
 
-	export let data: PageData;
-
+	let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 	let pokemons: CapturedPokemon[] = [];
-	let perPage = 10;
+	let perPage: number = 10;
 	let page: number = 1;
-	let filter: { key: FilterAndSortOptions; value: string };
-	let sort: { key: FilterAndSortOptions; direction: SortDirection } = {
+	let filter: Filter;
+	let sort: Sort = {
 		key: 'name',
 		direction: 'asc'
 	};
 
 	$: onChangeMyPokemons($myPokemons);
+	$: paginatedPokemons = pokemons.slice((page - 1) * perPage, page * perPage);
+
+	onDestroy(() => {
+		if (debounceTimeout) clearTimeout(debounceTimeout);
+	});
 
 	function handleCSV() {
 		downloadCSV(capturedPokemonsToCSV(pokemons), 'My_Pokemons.csv');
 	}
 
 	async function handleAddNote(note: string, pokemon: CapturedPokemon) {
-		$loading = true;
-		const res = await addNoteToPokemon(data.user.id, pokemon.id, note);
-		if (res.hasError) {
-			toast.error('Fail to add note');
-			$loading = false;
-			return;
-		}
-		toast.success(`Note added to ${pokemon.name}`);
-
-		const indexToUpdate = $myPokemons.findIndex((p) => p.id === pokemon.id);
-		if (indexToUpdate != -1) {
-			$myPokemons[indexToUpdate].note = note;
-		}
-		$loading = false;
+		await addNoteToMyPokemon(note, pokemon);
 	}
 
-	function filterAndSort(capturedPokemons: CapturedPokemon[]) {
-		if (capturedPokemons.length === 0) {
-			pokemons = [];
-			return;
-		}
-
-		let filterAndSorted = [...capturedPokemons];
-		if (filter?.key && filter?.value) {
-			filterAndSorted = filterPokemons(filterAndSorted, filter);
-		}
-
-		if (sort?.key && sort?.direction) {
-			filterAndSorted = sortPokemons(filterAndSorted, sort);
-		}
-
-		pokemons = [...filterAndSorted];
+	function handleFilterAndSort() {
+		pokemons = filterAndSortPokemons(filter, sort);
 	}
 
-	function onChangeMyPokemons(pokemons: CapturedPokemon[]) {
-		filterAndSort(pokemons);
+	function onChangeMyPokemons(capturedPokemons: CapturedPokemon[]) {
+		pokemons = [];
+		if (capturedPokemons) {
+			handleFilterAndSort();
+		}
 	}
 
 	async function handleDelete() {
-		$loading = true;
-		const deleteIds = pokemons.filter((p) => p.checked).map((p) => p.id);
-		if (deleteIds.length) {
-			const res = await deletePokemons(data.user.id, deleteIds);
-			if (res.hasError) {
-				toast.error('Fail to delete pokemons');
-				$loading = false;
-				return;
-			}
-			toast.success(`pokemons deleted`);
-			$myPokemons = $myPokemons.filter((p) => !deleteIds.includes(p.id));
-		}
-		$loading = false;
+		await deleteFromPokedex(pokemons);
+	}
+
+	function debounce(func: () => void, delay = 300) {
+		if (debounceTimeout) clearTimeout(debounceTimeout);
+		debounceTimeout = setTimeout(async () => {
+			await tick();
+			func();
+		}, delay);
 	}
 </script>
 
@@ -114,11 +89,11 @@
 <FilterAndSort
 	on:filter={(e) => {
 		filter = { key: e.detail.key, value: e.detail.value };
-		filterAndSort($myPokemons);
+		debounce(handleFilterAndSort);
 	}}
 	on:sort={(e) => {
 		sort = { key: e.detail.key, direction: e.detail.direction };
-		filterAndSort($myPokemons);
+		debounce(handleFilterAndSort);
 	}}
 />
 
@@ -148,18 +123,18 @@
 		<div class="flex flex-wrap gap-4 justify-center mt-5">
 			{#if $myPokemons?.length}
 				{#await import('./(components)/pokemonsCard.svelte') then PokemonCard}
-					{#each pokemons.slice((page - 1) * perPage, page * perPage) as pokemon, i (i)}
+					{#each paginatedPokemons as pokemon, i (i)}
 						<PokemonCard.default
 							{pokemon}
-							on:addNote={(e) => {
-								handleAddNote(e.detail.note, pokemon);
+							on:addNote={async (e) => {
+								await handleAddNote(e.detail.note, pokemon);
 							}}
 						/>
 					{/each}
 				{/await}
 			{:else}
 				<div class="flex justify-center items-center">
-					<p class="">No pokemons added to pokédex</p>
+					<p>No pokemons added to pokédex</p>
 				</div>
 			{/if}
 		</div>

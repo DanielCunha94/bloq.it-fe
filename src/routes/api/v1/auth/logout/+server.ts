@@ -1,6 +1,6 @@
 import * as auth from '$lib/server/auth';
 import { json, redirect } from '@sveltejs/kit';
-import type { RequestEvent } from '../$types';
+import type { RequestEvent } from './$types';
 
 export async function POST(event: RequestEvent) {
 	if (!event.locals.session) {

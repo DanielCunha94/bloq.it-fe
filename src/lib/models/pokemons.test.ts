@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { externalPokemonToPokemon, setCapturedPokemons, type Pokemon } from './pokemon';
-import type { CapturedPokemon } from './pokedex';
-
 import { type Pokemon as ExternalPokemon } from 'pokeapi-js-wrapper';
+import { externalPokemonToPokemon, setCapturedPokemons, type Pokemon } from '$lib/models/pokemon';
+import type { CapturedPokemon } from '$lib/models/pokedex';
 
 describe('externalPokemonToPokemon', () => {
 	it('should convert an ExternalPokemon to a Pokemon', () => {
